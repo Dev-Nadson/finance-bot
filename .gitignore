@@ -1,0 +1,15 @@
+# Ambientes virtuais
+.venv/
+venv/
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+ruff_cache
+
+# Distribuição / Build
+dist/
+build/
+*.egg-info/
