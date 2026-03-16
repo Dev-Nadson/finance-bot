@@ -1,8 +1,10 @@
-from app import bot
+from bot.setup import bot as t_bot
+import bot.app
 
 def main():
     print("Bot is running 🚀")
-    bot.polling()
+    t_bot.polling()
+
 
 if __name__ == "__main__":
     main()
