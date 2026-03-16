@@ -5,6 +5,32 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "groq>=1.1.1",
+    "matplotlib>=3.10.8",
+    "openai>=2.28.0",
+    "pydantic>=2.12.5",
     "python-dotenv>=1.2.2",
     "telebot>=0.0.5",
 ]
+
+[dependency-groups]
+dev = [
+    "hupper>=1.12.1",
+    "ruff>=0.15.6",
+    "taskipy>=1.14.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.taskipy.tasks]
+dev = "hupper -m src.main"
+lint = "ruff check ."
+lint-format = "ruff format ."
+lint-fix = "ruff check . --fix"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I"] 
