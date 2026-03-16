@@ -1,5 +1,24 @@
 Lista de afazeres ✅: 
 
+Guia de comandos:
+/saldo - Saldo que sobre após as despesas
+
+/despesa - Lista todas as despesas
+/despesa-new
+/despesa-edit
+/despesa-remove
+
+/receita - Lista todas as receitas
+/receita-new
+/receita-edit
+/receita-remove
+
+/geral - Gráfico geral - Saldo | Gasto | Despesa
+/geral-despesa - Gráfico de despesas - Tipos de Gastos
+/geral-receita - Gráfico de receita - Tipos de receita
+
+---
+
 Essencial
 - 1 - Iniciar o bot e mostrar menu principal
 - 2 - Registrar despesa
