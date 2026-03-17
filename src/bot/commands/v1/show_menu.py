@@ -1,4 +1,4 @@
-from bot.setup import botg
+from bot.setup import bot
 from telebot import types
 
 def show_menu(msg: types.Message):
@@ -10,12 +10,12 @@ def show_menu(msg: types.Message):
 
     markup.add(btn_despesas,btn_balance,btn_receitas)
 
-    bot_reply_to(msg, "Olá! Escolha uma das opções abaixo para gerir suas finanças: ", reply_markup=markup)
+    bot.reply_to(msg, "Olá! Escolha uma das opções abaixo para gerir suas finanças: ", reply_markup=markup)
 
 def handle_callback(call, bot):
     if call.data == "add_despesas":
         bot.send.Message(call.message.chat.id, "Digite o Valor da Despesa:")
-    elif call.data = "ver_saldo"
+    elif call.data == "ver_saldo":
         bot.send.Message(call.message.chat.id, "Consultando seu saldo nos Registros...")
 
-    bot_answer_callback_query(call.id)
+    bot.answer_callback_query(call.id)
