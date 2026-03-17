@@ -78,7 +78,7 @@ finance-bot/
 │   │   │   ├── envroinments.py         # Carrega variáveis de ambiente com dotenv
 │   │   │   ├── groq_config.py          # Configuração e cliente da API Groq
 │   │   │   └── openapi_config.py       # Configuração e cliente da API OpenAI
-│   │   └── models/
+│   │   └── schemas/
 │   │       └── classes.py              # Modelos Pydantic (ex: envConfig)
 │   └── services/
 │       └── charts.py                   # Geração de gráficos com Matplotlib
