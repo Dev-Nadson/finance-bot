@@ -1,5 +1,5 @@
 from bot.setup import bot as t_bot
-import bot.app
+
 
 def main():
     print("Bot is running 🚀")

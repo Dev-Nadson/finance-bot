@@ -1,6 +1,6 @@
 # 💸 Finance Bot
 
-> Bot de finanças pessoais para Telegram com suporte a IA, gráficos e controle de receitas e despesas.
+**Bot de finanças pessoais para Telegram com suporte a IA, gráficos e controle de receitas e despesas.**
 
 ---
 
@@ -31,6 +31,31 @@
 - [ ] Gráfico comparativo receitas x despesas
 - [ ] Resumo financeiro do mês
 - [ ] Exportar relatório financeiro
+
+---
+## 🚀 Guia de Comandos
+
+| Comando | Descrição |
+|---|---|
+| Geral | Comandos gerais |
+| `/saldo` | Saldo disponível após as despesas |
+|---|---|
+| Despesas | Comandos para manipular as despesas |
+| `/despesa` | Lista todas as despesas |
+| `/despesa-new` | Cadastra uma nova despesa |
+| `/despesa-edit` | Edita uma despesa existente |
+| `/despesa-remove` | Remove uma despesa |
+|---|---|
+| Receita | Comandos para manipular as fontes de receita |
+| `/receita` | Lista todas as receitas |
+| `/receita-new` | Cadastra uma nova receita |
+| `/receita-edit` | Edita uma receita existente |
+| `/receita-remove` | Remove uma receita |
+|---|---|
+| Geral | Comandos para gerar gŕaficos |
+| `/geral` | Gráfico geral — Saldo, Gasto e Despesa |
+| `/geral-despesa` | Gráfico de despesas por tipo de gasto |
+| `/geral-receita` | Gráfico de receitas por tipo |
 
 ---
 
@@ -78,25 +103,6 @@ O projeto segue uma separação clara de responsabilidades dividida em três cam
 
 ---
 
-## 🚀 Guia de Comandos
-
-| Comando | Descrição |
-|---|---|
-| `/saldo` | Saldo disponível após as despesas |
-| `/despesa` | Lista todas as despesas |
-| `/despesa-new` | Cadastra uma nova despesa |
-| `/despesa-edit` | Edita uma despesa existente |
-| `/despesa-remove` | Remove uma despesa |
-| `/receita` | Lista todas as receitas |
-| `/receita-new` | Cadastra uma nova receita |
-| `/receita-edit` | Edita uma receita existente |
-| `/receita-remove` | Remove uma receita |
-| `/geral` | Gráfico geral — Saldo, Gasto e Despesa |
-| `/geral-despesa` | Gráfico de despesas por tipo de gasto |
-| `/geral-receita` | Gráfico de receitas por tipo |
-
----
-
 ## ⚙️ Instalação e Execução
 
 ### Pré-requisitos
@@ -133,10 +139,10 @@ OPENAI_API_KEY=sua_chave_openai_aqui
 
 ### 4. Execute o projeto
 
-**Modo de desenvolvimento** (com hot-reload via hupper):
+**Modo de desenvolvimento:**
 
 ```bash
-uv run task dev
+uv run src/main.py
 ```
 
 **Modo padrão:**
