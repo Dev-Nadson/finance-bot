@@ -4,58 +4,121 @@
 
 ---
 
-## 📋 To-Do List
+## 📋 TODO — Finance Bot
 
-### ✅ Essencial
+---
 
-- [ ] Iniciar o bot e mostrar menu principal
-- [ ] Registrar despesa
-- [ ] Registrar receita
-- [ ] Calcular saldo atual
+### 🤖 Frontend (Bot — Comandos & Handlers)
 
-### 🔧 Comandos Fixos
+**Setup inicial**
+- [ ] Criar handler de `/start` com mensagem de boas-vindas e menu de comandos
+- [ ] Criar função para inserir o usuário no banco de dados no primeiro `/start`
 
-- [ ] Exibir comandos de registro
-- [ ] Listar transações
-- [ ] Filtrar por período
-- [ ] Filtrar por categoria
-- [ ] Total de receitas e despesas
-- [ ] Categoria com maior gasto
-- [ ] Gráfico de evolução de gastos
-- [ ] Editar e excluir transação
-- [ ] Histórico recente
+**Geral**aiosqlite
+- [ ] `/saldo` — buscar e exibir saldo atual (receitas - despesas)
 
-### 🤖 Comandos com IA
+**Despesas**
+- [ ] `/despesa` — listar todas as despesas do usuário
+- [ ] `/despesa-new <valor> <categoria> [descrição]` — registrar nova despesa via linha única
+- [ ] `/despesa-edit <id> <campo> <novo_valor>` — editar despesa existente
+- [ ] `/despesa-remove <id>` — remover despesa por ID
 
-- [ ] Gráfico de gastos por categoria
-- [ ] Gráfico comparativo receitas x despesas
-- [ ] Resumo financeiro do mês
-- [ ] Exportar relatório financeiro
+**Receitas**
+- [ ] `/receita` — listar todas as receitas do usuário
+- [ ] `/receita-new <valor> <categoria> [descrição]` — registrar nova receita
+- [ ] `/receita-edit <id> <campo> <novo_valor>` — editar receita existente
+- [ ] `/receita-remove <id>` — remover receita por ID
+
+**Gráficos**
+- [ ] `/geral` — gráfico geral com saldo, total gasto e total de despesas
+- [ ] `/geral-despesa` — gráfico de pizza/barra por categoria de despesa
+- [ ] `/geral-receita` — gráfico de pizza/barra por categoria de receita
+
+**Comandos com IA**
+- [ ] `/resumo` — resumo financeiro do mês gerado por IA
+- [ ] `/exportar` — exportar relatório financeiro em PDF ou texto
+
+**Validação & Erros**
+- [ ] Criar função `parse_args()` com `shlex` + Pydantic para todos os comandos de entrada
+- [ ] Padronizar mensagens de erro com formato de ajuda inline (ex: `❌ Use: /despesa-new 100 energia fixo`)
+- [ ] Adicionar `try/except` em todos os handlers com feedback ao usuário
+
+---
+
+### 🗄️ Backend (Banco de Dados, Modelos & Serviços)
+
+**Configuração do ambiente**
+- [ ] Adicionar `sqlalchemy`, `alembic` e `pysqlite` ao `pyproject.toml`
+- [ ] Adicionar `DATABASE_URL` ao `.env.example` e ao modelo `envConfig`
+- [ ] Criar `database/connection.py` — engine, `SessionLocal` e `Base`
+
+**Models**
+- [ ] `database/models/user.py` — `id`, `telegram_id` (BigInteger, unique), `username`, `first_name`, `created_at`
+- [ ] `database/models/despesa.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
+- [ ] `database/models/receita.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
+
+**Repositories (CRUD)**
+- [ ] `database/repositories/user_repo.py` — `get and create(telegram_id)`
+- [ ] `database/repositories/despesa_repo.py` — `create`, `list_by_user`, `update`, `delete`
+- [ ] `database/repositories/receita_repo.py` — `create`, `list_by_user`, `update`, `delete`
+
+**Migrations com Alembic**
+- [ ] Inicializar Alembic (`alembic init alembic/`)
+- [ ] Configurar `alembic.ini` e `env.py` para ler `DATABASE_URL` do `.env`
+- [ ] Gerar migration inicial com todos os models
+- [ ] Adicionar `task migrate` e `task migrate-new` no `pyproject.toml`
+
+**Serviços**
+- [ ] `services/financeiro.py` — `calcular_saldo(user_id)`, `total_por_categoria(user_id)`, `resumo_mensal(user_id)`
+- [ ] `services/charts.py` — refatorar para receber dados reais do banco em vez de `x` e `y` hardcoded
+- [ ] `services/ai/base.py` — interface abstrata `AIProvider`
+- [ ] `services/ai/groq_provider.py` — implementação Groq
+- [ ] `services/ai/openai_provider.py` — implementação OpenAI
+- [ ] Remover `print()` de teste dos arquivos `groq_config.py` e `openapi_config.py`
+
+**Futuro (PostgreSQL + Docker)**
+- [ ] Criar `Dockerfile`
+- [ ] Criar `docker-compose.yml` com serviços `bot` e `postgres`
+- [ ] Trocar `DATABASE_URL` de SQLite para PostgreSQL na configuração
+- [ ] Substituir driver por `psycopg2` ou `asyncpg`
 
 ---
 ## 🚀 Guia de Comandos
 
+### 💰 Geral
 | Comando | Descrição |
 |---|---|
-| Geral | Comandos gerais |
-| `/saldo` | Saldo disponível após as despesas |
+| `/start` | Inicia o bot e exibe o menu principal |
+| `/saldo` | Exibe o saldo atual (receitas − despesas) |
+| `/resumo` | Resumo financeiro do mês gerado por IA |
+| `/exportar` | Exporta relatório financeiro |
+
+### 📉 Despesas
+| Comando | Descrição |
 |---|---|
-| Despesas | Comandos para manipular as despesas |
 | `/despesa` | Lista todas as despesas |
-| `/despesa-new` | Cadastra uma nova despesa |
-| `/despesa-edit` | Edita uma despesa existente |
-| `/despesa-remove` | Remove uma despesa |
+| `/despesa-new <valor> <categoria> [descrição]` | Cadastra uma nova despesa |
+| `/despesa-edit <id> <campo> <novo_valor>` | Edita uma despesa existente |
+| `/despesa-remove <id>` | Remove uma despesa |
+
+> Exemplo: `/despesa-new 150 alimentação "mercado da semana"`
+
+### 📈 Receitas
+| Comando | Descrição |
 |---|---|
-| Receita | Comandos para manipular as fontes de receita |
 | `/receita` | Lista todas as receitas |
-| `/receita-new` | Cadastra uma nova receita |
-| `/receita-edit` | Edita uma receita existente |
-| `/receita-remove` | Remove uma receita |
+| `/receita-new <valor> <categoria> [descrição]` | Cadastra uma nova receita |
+| `/receita-edit <id> <campo> <novo_valor>` | Edita uma receita existente |
+| `/receita-remove <id>` | Remove uma receita |
+
+> Exemplo: `/receita-new 3000 salário "pagamento mensal"`
+
+### 📊 Gráficos
+| Comando | Descrição |
 |---|---|
-| Geral | Comandos para gerar gŕaficos |
-| `/geral` | Gráfico geral — Saldo, Gasto e Despesa |
-| `/geral-despesa` | Gráfico de despesas por tipo de gasto |
-| `/geral-receita` | Gráfico de receitas por tipo |
+| `/geral` | Gráfico geral — Saldo, Receitas e Despesas |
+| `/geral-despesa` | Gráfico de despesas por categoria |
+| `/geral-receita` | Gráfico de receitas por categoria |
 
 ---
 
@@ -78,7 +141,7 @@ finance-bot/
 │   │   │   ├── envroinments.py         # Carrega variáveis de ambiente com dotenv
 │   │   │   ├── groq_config.py          # Configuração e cliente da API Groq
 │   │   │   └── openapi_config.py       # Configuração e cliente da API OpenAI
-│   │   └── models/
+│   │   └── schemas/
 │   │       └── classes.py              # Modelos Pydantic (ex: envConfig)
 │   └── services/
 │       └── charts.py                   # Geração de gráficos com Matplotlib

@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
-from config.models.classes import envConfig
+from config.schemas.classes import envConfig
 
 load_dotenv()
 
