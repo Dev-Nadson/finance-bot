@@ -28,12 +28,3 @@ def generate_gpt_response(prompt: str) -> str:
     except Exception as e:
         return f"Erro na API: {str(e)}"
 
-
-if __name__ == "__main__":
-    # Teste com uma pergunta bem direta
-    print("Enviando pergunta para o GPT-5 Nano...")
-    resposta = generate_gpt_response("me fale sobre o charles do bronx")
-
-    print("-" * 30)
-    print(f"RESPOSTA DA IA:\n {resposta}")
-    print("-" * 30)

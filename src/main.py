@@ -1,4 +1,5 @@
 from bot.setup import bot as t_bot
+import bot.app as functions
 
 
 def main():

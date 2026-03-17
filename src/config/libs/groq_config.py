@@ -16,6 +16,3 @@ def generate_ai_response(prompt: str) -> str:
         return completion.choices[0].message.content
     except Exception as e:
         return f"Erro no Groq: {str(e)}"
-
-
-print(generate_ai_response("me fale sobre o charles do bronx"))
