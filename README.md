@@ -33,6 +33,31 @@
 - [ ] Exportar relatório financeiro
 
 ---
+## 🚀 Guia de Comandos
+
+| Comando | Descrição |
+|---|---|
+| Geral | Comandos gerais |
+| `/saldo` | Saldo disponível após as despesas |
+|---|---|
+| Despesas | Comandos para manipular as despesas |
+| `/despesa` | Lista todas as despesas |
+| `/despesa-new` | Cadastra uma nova despesa |
+| `/despesa-edit` | Edita uma despesa existente |
+| `/despesa-remove` | Remove uma despesa |
+|---|---|
+| Receita | Comandos para manipular as fontes de receita |
+| `/receita` | Lista todas as receitas |
+| `/receita-new` | Cadastra uma nova receita |
+| `/receita-edit` | Edita uma receita existente |
+| `/receita-remove` | Remove uma receita |
+|---|---|
+| Geral | Comandos para gerar gŕaficos |
+| `/geral` | Gráfico geral — Saldo, Gasto e Despesa |
+| `/geral-despesa` | Gráfico de despesas por tipo de gasto |
+| `/geral-receita` | Gráfico de receitas por tipo |
+
+---
 
 ## 🗂️ Estrutura de Pastas
 
@@ -75,32 +100,6 @@ O projeto segue uma separação clara de responsabilidades dividida em três cam
 **`config/`** — Camada de configuração e infraestrutura. Carrega as variáveis de ambiente via `dotenv`, valida-as com um modelo Pydantic (`envConfig`) e expõe clientes prontos para uso das APIs externas (Groq e OpenAI).
 
 **`services/`** — Camada de lógica e serviços reutilizáveis. Atualmente contém a geração de gráficos com Matplotlib. Aqui ficarão os serviços de IA, relatórios e regras de negócio financeiras.
-
----
-
-## 🚀 Guia de Comandos
-
-| Comando | Descrição |
-|---|---|
-| Geral | Comandos gerais |
-| `/saldo` | Saldo disponível após as despesas |
-|---|---|
-| Despesas | Comandos para manipular as despesas |
-| `/despesa` | Lista todas as despesas |
-| `/despesa-new` | Cadastra uma nova despesa |
-| `/despesa-edit` | Edita uma despesa existente |
-| `/despesa-remove` | Remove uma despesa |
-|---|---|
-| Receita | Comandos para manipular as fontes de receita |
-| `/receita` | Lista todas as receitas |
-| `/receita-new` | Cadastra uma nova receita |
-| `/receita-edit` | Edita uma receita existente |
-| `/receita-remove` | Remove uma receita |
-|---|---|
-| Geral | Comandos para gerar gŕaficos |
-| `/geral` | Gráfico geral — Saldo, Gasto e Despesa |
-| `/geral-despesa` | Gráfico de despesas por tipo de gasto |
-| `/geral-receita` | Gráfico de receitas por tipo |
 
 ---
 
