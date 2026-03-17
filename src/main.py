@@ -1,5 +1,7 @@
+import bot.app  # noqa: F401
 from bot.setup import bot as t_bot
-import bot.app as functions
+
+# noqa faz o ruff-fix ignorar a linha acima
 
 
 def main():

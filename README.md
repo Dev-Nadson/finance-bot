@@ -14,7 +14,7 @@
 - [ ] Criar handler de `/start` com mensagem de boas-vindas e menu de comandos
 - [ ] Criar função para inserir o usuário no banco de dados no primeiro `/start`
 
-**Geral**
+**Geral**aiosqlite
 - [ ] `/saldo` — buscar e exibir saldo atual (receitas - despesas)
 
 **Despesas**
@@ -48,7 +48,7 @@
 ### 🗄️ Backend (Banco de Dados, Modelos & Serviços)
 
 **Configuração do ambiente**
-- [ ] Adicionar `sqlalchemy`, `alembic` e `aiosqlite` (ou `pysqlite`) ao `pyproject.toml`
+- [ ] Adicionar `sqlalchemy`, `alembic` e `pysqlite` ao `pyproject.toml`
 - [ ] Adicionar `DATABASE_URL` ao `.env.example` e ao modelo `envConfig`
 - [ ] Criar `database/connection.py` — engine, `SessionLocal` e `Base`
 
@@ -58,7 +58,7 @@
 - [ ] `database/models/receita.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
 
 **Repositories (CRUD)**
-- [ ] `database/repositories/user_repo.py` — `get_or_create(telegram_id)`
+- [ ] `database/repositories/user_repo.py` — `get and create(telegram_id)`
 - [ ] `database/repositories/despesa_repo.py` — `create`, `list_by_user`, `update`, `delete`
 - [ ] `database/repositories/receita_repo.py` — `create`, `list_by_user`, `update`, `delete`
 
