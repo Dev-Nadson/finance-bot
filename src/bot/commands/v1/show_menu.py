@@ -1,4 +1,4 @@
-from bot.setup import bot
+from bot.setup import botg
 from telebot import types
 
 def show_menu(msg: types.Message):
