@@ -1,3 +1,5 @@
+import os
+
 import bot.app  # noqa: F401
 from bot.setup import bot as t_bot
 
@@ -5,6 +7,7 @@ from bot.setup import bot as t_bot
 
 
 def main():
+    os.system("cls" if os.name == "nt" else "clear")
     print("Bot is running 🚀")
     t_bot.polling()
 
