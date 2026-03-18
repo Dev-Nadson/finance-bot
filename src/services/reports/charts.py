@@ -217,7 +217,6 @@ def generate_lines_chart(data: ChartLinesData) -> bytes:
     return buf.getvalue()
 
 
-# # ── Exemplo de uso ────────────────────────────────────────────────────────────
 # if __name__ == '__main__':
 #     # Série única
 #     sample_single = ChartLinesData(
@@ -258,12 +257,12 @@ def generate_pie_chart(data: ChartPieData) -> bytes:
     TITLE_COLOR = "#FFFFFF"
 
     SLICE_COLORS = [
-        "#2979FF",  # Vendas     – azul elétrico
-        "#E040FB",  # Marketing  – magenta/violeta
-        "#76FF03",  # Pesquisa   – verde-limão
-        "#FF6D00",  # Despesas   – laranja
-        "#AA00FF",  # Operações  – roxo profundo
-        "#FFD600",  # extra
+        "#2979FF",
+        "#E040FB",
+        "#76FF03",
+        "#FF6D00",
+        "#AA00FF",
+        "#FFD600",  
     ]
 
     n = len(data.values)
