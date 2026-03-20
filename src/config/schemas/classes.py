@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 
 class envConfig(BaseModel):
+    SQL_ALCHEMY_DATABASE_URL: str
     TELEGRAM_BOT_TOKEN: str
     GROQ_API_KEY: str
     OPENAI_API_KEY: str
