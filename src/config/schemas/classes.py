@@ -1,3 +1,5 @@
+from dataclasses import field
+
 from pydantic import BaseModel
 
 
@@ -15,8 +17,9 @@ class ChartBaseData(BaseModel):
 
 
 class ChartLinesData(ChartBaseData):
-    x_values: list[float]
-    y_values: list[float]
+    x_values: list
+    y_values: list  # lista simples OU lista de listas múltiplas séries
+    series_labels: list[str] = field(default_factory=list)
 
 
 class ChartPieData(ChartBaseData):

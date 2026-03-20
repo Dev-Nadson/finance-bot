@@ -21,4 +21,5 @@ def handle_callback(call, bot):
     elif call.data == "ver_saldo":
         bot.send_message(call.message.chat.id, "Consultando seu saldo nos Registros...")
 
-    bot.answer_callback_query(call.id)
+    bot_answer_callback_query(call.id)
+# explicar conflito merge 
