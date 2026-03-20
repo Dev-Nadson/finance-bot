@@ -7,14 +7,17 @@ class envConfig(BaseModel):
     GROQ_API_KEY: str
     OPENAI_API_KEY: str
 
+
 class ChartBaseData(BaseModel):
     xlabel: str = "X"
     ylabel: str = "Y"
     title: str = "Gráfico"
 
+
 class ChartLinesData(ChartBaseData):
     x_values: list[float]
     y_values: list[float]
+
 
 class ChartPieData(ChartBaseData):
     categories: list[str]

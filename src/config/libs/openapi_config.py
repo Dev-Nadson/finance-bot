@@ -27,4 +27,3 @@ def generate_gpt_response(prompt: str) -> str:
 
     except Exception as e:
         return f"Erro na API: {str(e)}"
-
