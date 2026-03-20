@@ -1,15 +1,19 @@
 import io
 
 import matplotlib
+
+# from config.schemas.classes import ChartLinesData, ChartPieData
 import numpy as np
 from matplotlib.figure import Figure
 
-from config.schemas.classes import ChartLinesData, ChartPieData
-
 matplotlib.use("Agg")
+from dataclasses import dataclass, field
+from typing import List
 
 import matplotlib.patheffects as pe
 from matplotlib.patches import FancyBboxPatch
+
+from config.schemas.classes import ChartLinesData, ChartPieData
 
 
 def generate_lines_chart(data: ChartLinesData) -> bytes:
