@@ -48,9 +48,9 @@
 ### 🗄️ Backend (Banco de Dados, Modelos & Serviços)
 
 **Configuração do ambiente**
-- [ ] Adicionar `sqlalchemy`, `alembic` e `pysqlite` ao `pyproject.toml`
-- [ ] Adicionar `DATABASE_URL` ao `.env.example` e ao modelo `envConfig`
-- [ ] Criar `database/connection.py` — engine, `SessionLocal` e `Base`
+- [X] Adicionar `sqlalchemy`, `alembic` e ao `pyproject.toml`
+- [X] Adicionar `SQL_ALCHEMY_DATABASE_URL` ao `.env.example` e ao modelo `envConfig`
+- [X] Criar `database/connection.py` — engine, `SessionLocal` e `Base`
 
 **Models**
 - [ ] `database/models/user.py` — `id`, `telegram_id` (BigInteger, unique), `username`, `first_name`, `created_at`
@@ -195,6 +195,7 @@ cp .env.example .env
 ```
 
 ```env
+SQL_ALCHEMY_DATABASE_URL=caminho_do_banco
 TELEGRAM_BOT_TOKEN=seu_token_aqui
 GROQ_API_KEY=sua_chave_groq_aqui
 OPENAI_API_KEY=sua_chave_openai_aqui
@@ -202,16 +203,8 @@ OPENAI_API_KEY=sua_chave_openai_aqui
 
 ### 4. Execute o projeto
 
-**Modo de desenvolvimento:**
-
 ```bash
 uv run src/main.py
-```
-
-**Modo padrão:**
-
-```bash
-uv run python src/main.py
 ```
 
 ### 5. Linting e formatação
@@ -233,6 +226,7 @@ uv run task lint-format
 
 | Variável | Descrição |
 |---|---|
+| `SQL_ALCHEMY_DATABASE_URL` | Caminho do banco de dados SQLite |
 | `TELEGRAM_BOT_TOKEN` | Token do bot gerado pelo [@BotFather](https://t.me/BotFather) |
 | `GROQ_API_KEY` | Chave de acesso à API da [Groq](https://console.groq.com/) |
 | `OPENAI_API_KEY` | Chave de acesso à API da [OpenAI](https://platform.openai.com/) |
