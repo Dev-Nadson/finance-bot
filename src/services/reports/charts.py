@@ -15,11 +15,6 @@ from matplotlib.patches import FancyBboxPatch
 
 from config.schemas.classes import ChartLinesData, ChartPieData
 
-matplotlib.use("Agg")
-
-import matplotlib.patheffects as pe
-from matplotlib.patches import FancyBboxPatch
-
 
 def generate_lines_chart(data: ChartLinesData) -> bytes:
     BG = "#0D0D0D"
