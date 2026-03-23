@@ -1,7 +1,6 @@
-from telebot import types
+from telegram import Update
+from telegram.ext import ContextTypes
 
-from bot.setup import bot
-
-
-def send_welcome(msg: types.Message):
-    bot.reply_to(msg, "testando")
+async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("testando")
+  

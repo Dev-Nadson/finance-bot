@@ -1,12 +1,12 @@
-from telebot import types
+from telegram import Update
+from telegram.ext import ContextTypes
 
-from bot.setup import bot
 from config.schemas.classes import ChartPieData
 from services.reports.charts import generate_pie_chart
 
 
-def send_pie_chart(msg: types.Message):
+async def send_pie_chart(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chart_file = generate_pie_chart(
         ChartPieData(categories=["Alimentação", "Transporte", "Lazer", "Educação"], values=[25, 35, 20, 20])
     )
-    bot.send_photo(msg.chat.id, chart_file, caption="Aqui está o seu gráfico! 📈")
+    await update.message.reply_photo(chart_file, caption="Aqui está o seu gráfico! 📈")

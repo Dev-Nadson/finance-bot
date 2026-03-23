@@ -1,15 +1,10 @@
 import io
 
 import matplotlib
-
-# from config.schemas.classes import ChartLinesData, ChartPieData
 import numpy as np
 from matplotlib.figure import Figure
 
 matplotlib.use("Agg")
-from dataclasses import dataclass, field
-from typing import List
-
 import matplotlib.patheffects as pe
 from matplotlib.patches import FancyBboxPatch
 

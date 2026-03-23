@@ -1,12 +1,10 @@
-from telebot import types
+from config.schemas.classes import ChartLinesData
+from services.reports.charts import generate_lines_chart
 
-from bot.setup import bot
+from telegram import Update
+from telegram.ext import ContextTypes
 
-# from config.schemas.classes import ChartLinesData
-from services.reports.charts import ChartLinesData, generate_lines_chart
-
-
-def send_chart(msg: types.Message):
+async def send_chart(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chart_file = generate_lines_chart(
         ChartLinesData(
             title="Vendas por Canal — 2024",
@@ -21,4 +19,4 @@ def send_chart(msg: types.Message):
             series_labels=["Online", "Loja Física", "Parceiros"],
         )
     )
-    bot.send_photo(msg.chat.id, chart_file, caption="Aqui está o seu gráfico! 📈")
+    await update.message.reply_photo(chart_file, caption="Aqui está o seu gráfico! 📈")
