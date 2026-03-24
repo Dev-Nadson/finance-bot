@@ -1,5 +1,5 @@
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler
-from bot.commands.backend import v1
+import bot.commands.backend as back
 import bot.commands.frontend as front
 
 def register_handlers(app: Application):
@@ -8,7 +8,7 @@ def register_handlers(app: Application):
     app.add_handler(CallbackQueryHandler(front.handle_callback))
 
     # Backend
-    app.add_handler(CommandHandler("start",  v1.send_welcome))
-    app.add_handler(CommandHandler("chart",  v1.send_chart))
-    app.add_handler(CommandHandler("chart2", v1.send_pie_chart))
+    app.add_handler(CommandHandler("start",  back.send_welcome))
+    app.add_handler(CommandHandler("chart",  back.send_chart))
+    app.add_handler(CommandHandler("chart2", back.send_pie_chart))
     
