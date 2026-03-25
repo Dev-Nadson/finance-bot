@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,ForeignKey
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 from config.libs.envroinments import env
