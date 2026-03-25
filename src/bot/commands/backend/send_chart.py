@@ -1,8 +1,9 @@
+from telegram import Update
+from telegram.ext import ContextTypes
+
 from config.schemas.classes import ChartLinesData
 from services.reports.charts import generate_lines_chart
 
-from telegram import Update
-from telegram.ext import ContextTypes
 
 async def send_chart(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chart_file = generate_lines_chart(

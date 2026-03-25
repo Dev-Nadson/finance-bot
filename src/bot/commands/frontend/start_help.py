@@ -1,6 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 
+
 async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
     nome = update.effective_user.first_name
 
@@ -27,4 +28,3 @@ async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     await update.message.reply_text(texto, parse_mode="Markdown")
-  

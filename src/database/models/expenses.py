@@ -1,15 +1,16 @@
-from sqlalchemy import create_engine, Column, String, Integer, Float, ForeignKey, DateTime, func
-from config.libs.envroinments import env
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, func
+
 from .db_config import Base, engine
+
 
 class Expenses(Base):
     __tablename__ = "expenses"
 
-    id_expenses = Column(Integer, primary_key = True, unique = True)
+    id_expenses = Column(Integer, primary_key=True, unique=True)
     value = Column(Float)
-    created_at = Column(DateTime, server_default= func.now())
-    user_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
+
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)

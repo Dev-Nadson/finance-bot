@@ -53,20 +53,14 @@
 - [X] Criar `database/connection.py` — engine, `SessionLocal` e `Base`
 
 **Models**
-- [ ] `database/models/user.py` — `id`, `telegram_id` (BigInteger, unique), `username`, `first_name`, `created_at`
-- [ ] `database/models/despesa.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
-- [ ] `database/models/receita.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
+- [X] `database/models/users.py` — `id`, `telegram_id` (BigInteger, unique), `username`, `first_name`, `created_at`
+- [X] `database/models/expenses.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
+- [X] `database/models/incomes.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
 
 **Repositories (CRUD)**
 - [ ] `database/repositories/user_repo.py` — `get and create(telegram_id)`
 - [ ] `database/repositories/despesa_repo.py` — `create`, `list_by_user`, `update`, `delete`
 - [ ] `database/repositories/receita_repo.py` — `create`, `list_by_user`, `update`, `delete`
-
-**Migrations com Alembic**
-- [ ] Inicializar Alembic (`alembic init alembic/`)
-- [ ] Configurar `alembic.ini` e `env.py` para ler `DATABASE_URL` do `.env`
-- [ ] Gerar migration inicial com todos os models
-- [ ] Adicionar `task migrate` e `task migrate-new` no `pyproject.toml`
 
 **Serviços**
 - [ ] `services/financeiro.py` — `calcular_saldo(user_id)`, `total_por_categoria(user_id)`, `resumo_mensal(user_id)`
@@ -74,7 +68,7 @@
 - [ ] `services/ai/base.py` — interface abstrata `AIProvider`
 - [ ] `services/ai/groq_provider.py` — implementação Groq
 - [ ] `services/ai/openai_provider.py` — implementação OpenAI
-- [ ] Remover `print()` de teste dos arquivos `groq_config.py` e `openapi_config.py`
+- [X] Remover `print()` de teste dos arquivos `groq_config.py` e `openapi_config.py`
 
 **Futuro (PostgreSQL + Docker)**
 - [ ] Criar `Dockerfile`
