@@ -324,7 +324,7 @@ def generate_pie_chart(data: ChartPieData) -> bytes:
             ]
         )
 
-    for (wedge, label) in enumerate(zip(wedges, data.categories)): # noqa B905
+    for i, (wedge, label) in enumerate(zip(wedges, data.categories)): # noqa
         angle = (wedge.theta2 + wedge.theta1) / 2
         x = np.cos(np.radians(angle))
         y = np.sin(np.radians(angle))

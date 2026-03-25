@@ -1,4 +1,7 @@
 from src.database.models.db_config import Base, engine
+from src.database.models.expenses import Expenses as Expenses
+from src.database.models.incomes import Incomes as Incomes
+from src.database.models.users import User as User
 
 
 def create_database():
