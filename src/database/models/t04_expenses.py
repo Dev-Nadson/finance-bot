@@ -1,16 +1,13 @@
-from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, func
+from sqlalchemy import Column, DateTime, Integer, String, func
 
 from .db_config import Base, engine
 
-
 class Expenses(Base):
     __tablename__ = "expenses"
-
-    id_expenses = Column(Integer, primary_key=True, unique=True)
-    value = Column(Float)
+    expenses_id = Column(Integer, primary_key=True, autoincrement=True)
+    # outras colunas
     created_at = Column(DateTime, server_default=func.now())
-    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
-
+    updated_at = Column(DateTime)
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)

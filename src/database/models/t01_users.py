@@ -1,12 +1,6 @@
-from sqlalchemy import Column, DateTime, Integer, String, create_engine, func
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, DateTime, Integer, String, func
 
-from config.libs.envroinments import env
-
-from .db_config import Base
-
-engine = create_engine(env.SQL_ALCHEMY_DATABASE_URL)
-
+from .db_config import Base, engine
 
 class User(Base):
     __tablename__ = "users"
@@ -14,9 +8,7 @@ class User(Base):
     telegram_id = Column(String(255), unique=True, nullable=False)
     name = Column(String(255), nullable=False)
     created_at = Column(DateTime, server_default=func.now())
-    expenses = relationship("Expenses", back_populates="user")
-    incomes = relationship("Incomes", back_populates="user")
-
+    updated_at = Column(DateTime)
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
