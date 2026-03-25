@@ -1,12 +1,10 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 
-async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    nome = update.effective_user.first_name
 
-    texto = (
-        f"Olá, {nome}! 👋 Bem-vindo ao seu *Finance Bot*.\n\n"
-        "Aqui você controla receitas, despesas e acompanha sua saúde financeira — tudo pelo Telegram.\n\n"
+async def send_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    help_text = (
         "💸 *Despesas*\n"
         "`/despesa` — lista todas as despesas\n"
         "`/despesa-new <valor> <categoria>` — registra nova despesa\n"
@@ -23,8 +21,6 @@ async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "`/geral-despesa` — gráfico por categoria de despesa\n"
         "`/geral-receita` — gráfico por categoria de receita\n"
         "`/resumo` — resumo financeiro gerado por IA\n\n"
-        "Use /menu para acessar as opções principais de forma rápida."
     )
 
-    await update.message.reply_text(texto, parse_mode="Markdown")
-  
+    await update.message.reply_text(help_text, parse_mode="Markdown")

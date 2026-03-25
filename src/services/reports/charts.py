@@ -97,7 +97,7 @@ def generate_lines_chart(data: ChartLinesData) -> bytes:
         )
         line_objects.append(line)
 
-        for xi, yi in zip(data.x_values, y_vals):
+        for xi, yi in zip(data.x_values, y_vals):  # noqa B905
             ax.annotate(
                 f"{yi:g}",
                 xy=(xi, yi),
@@ -261,7 +261,7 @@ def generate_pie_chart(data: ChartPieData) -> bytes:
         "#76FF03",
         "#FF6D00",
         "#AA00FF",
-        "#FFD600",  
+        "#FFD600",
     ]
 
     n = len(data.values)
@@ -324,7 +324,7 @@ def generate_pie_chart(data: ChartPieData) -> bytes:
             ]
         )
 
-    for i, (wedge, label) in enumerate(zip(wedges, data.categories)):
+    for i, (wedge, label) in enumerate(zip(wedges, data.categories)): # noqa
         angle = (wedge.theta2 + wedge.theta1) / 2
         x = np.cos(np.radians(angle))
         y = np.sin(np.radians(angle))
@@ -405,7 +405,7 @@ def generate_pie_chart(data: ChartPieData) -> bytes:
     )
 
     row_height = 0.68 / n
-    for i, (cat, color) in enumerate(zip(data.categories, colors)):
+    for i, (cat, color) in enumerate(zip(data.categories, colors)): # noqa B905
         y_pos = 0.76 - i * row_height - row_height / 2
 
         rect = FancyBboxPatch(
