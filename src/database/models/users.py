@@ -13,6 +13,7 @@ class User(Base):
     name = Column(String(255), nullable=False)
     created_at = Column(DateTime,  server_default = func.now())
     expenses = relationship('Expenses', back_populates = 'user')
+    incomes = relationship('Incomes', back_populates = 'user')
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)

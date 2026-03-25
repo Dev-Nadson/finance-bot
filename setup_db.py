@@ -1,6 +1,7 @@
 from src.database.models.db_config import Base, engine
 from src.database.models.users import User
 from src.database.models.expenses import Expenses
+from src.database.models.incomes import Incomes
 
 def create_database():
     print('Limpando dados antigos...')
