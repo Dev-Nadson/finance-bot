@@ -8,14 +8,13 @@ class Expenses(Base):
 
     expenses_id = Column(Integer, primary_key=True, autoincrement=True)
     account_id = Column(Integer, ForeignKey('accounts.account_id'), nullable=False)
-    created_at = Column(DateTime, server_default=func.now())
-    updated_at = Column(DateTime, server_default=func.now())
-    delete_at = Column(DateTime, server_default=func.now())
     value = Column(Float)
     type = Column(VARCHAR)
     category = Column(String)
     description = Column(VARCHAR)
-
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime)
+    delete_at = Column(DateTime)
 
 
 if __name__ == "__main__":

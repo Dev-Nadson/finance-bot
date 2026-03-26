@@ -1,32 +1,29 @@
-from contextlib import contextmanager
+from contextlib import asynccontextmanager
 
-from sqlalchemy import create_engine,ForeignKey
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import declarative_base
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
 
 from config.libs.envroinments import env
 
-engine = create_engine(
+engine = create_async_engine(
     env.SQL_ALCHEMY_DATABASE_URL,
     connect_args={"check_same_thread": False},  # necessário para SQLite em contexto async
 )
 
-_SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+_SessionLocal = async_sessionmaker(bind=engine, class_=AsyncSession, autocommit=False, expire_on_commit=False, autoflush=False)
 Base = declarative_base()
 
-
-@contextmanager
-def get_session():
+@asynccontextmanager
+async def get_session():
     """
     Uso:
-        with get_session() as session:
+        async with get_session() as session:
             session.add(obj)
     """
-    session = _SessionLocal()
-    try:
-        yield session
-        session.commit()
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.close()
+    async with _SessionLocal() as session:
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise

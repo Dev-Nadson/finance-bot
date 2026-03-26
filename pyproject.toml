@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "aiosqlite>=0.22.1",
     "groq>=1.1.1",
     "matplotlib>=3.10.8",
     "openai>=2.28.0",

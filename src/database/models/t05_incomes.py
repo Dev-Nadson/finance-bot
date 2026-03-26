@@ -12,8 +12,8 @@ class Incomes(Base):
     type = Column(VARCHAR)
     description = Column(VARCHAR)
     created_at = Column(DateTime, server_default=func.now())
-    updated_at = Column(DateTime, server_default=func.now(  ))
-    deleted_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime)
+    deleted_at = Column(DateTime)
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
