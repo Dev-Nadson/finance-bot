@@ -10,7 +10,7 @@ class User(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime)
 
-    def to_dict(self):
+    def to_dict(self): #me lembra de explicar isso
         return {
             "id": self.user_id,
             "telegram_id": self.telegram_id,
