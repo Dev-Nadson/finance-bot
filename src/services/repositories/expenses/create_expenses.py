@@ -19,12 +19,7 @@ async def create_expenses_repository(account_id:int, value: float, type: str, ca
             print(f'Segurança: Usuário {telegram_id} tentou acessar conta de terceiros')
             return 403
         
-        try:
-            expenses = Expenses(account_id = account_id, value = value, type = type, category = category, description = description)
-            session.add(expenses)
-            await session.commit()
-            return 201
-        except Exception as e:
-            await session.rollback()
-            print(f'Erro Critico no banco: {e}')
-            return 500
+        expenses = Expenses(account_id = account_id, value = value, type = type, category = category, description = description)
+        session.add(expenses)
+        await session.commit()
+        return 201

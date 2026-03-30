@@ -18,12 +18,7 @@ async def create_incomes_repository(incomes_id:int, value: float, type: str, cat
         if account_exists.user_id != user_exists.user_id:
             print(f'Segurança: Usuário {telegram_id} tentou acessar conta de terceiros')
             return 403
-        try:
-            incomes = Incomes(account_id = account_id, value = value, category = category, type = type, description = description)
-            session.add(incomes)
-            await session.commit()
-            return 201
-        except Exception as e:
-            await session.rollback()
-            print(f'Erro Critico no banco: {e}')
-            return 500
+        
+        incomes = Incomes(account_id = account_id, value = value, category = category, type = type, description = description)
+        session.add(incomes)
+        return 201
