@@ -11,8 +11,8 @@
 ### 🤖 Frontend (Bot — Comandos & Handlers)
 
 **Setup inicial**
-- [ ] Criar handler de `/start` com mensagem de boas-vindas e menu de comandos
-- [ ] Criar função para inserir o usuário no banco de dados no primeiro `/start`
+- [X] Criar handler de `/start` com mensagem de boas-vindas e menu de comandos
+- [X] Criar função para inserir o usuário no banco de dados no primeiro `/start`
 
 **Geral**aiosqlite
 - [ ] `/saldo` — buscar e exibir saldo atual (receitas - despesas)
@@ -53,12 +53,14 @@
 - [X] Criar `database/connection.py` — engine, `SessionLocal` e `Base`
 
 **Models**
-- [ ] `database/models/user.py` — `id`, `telegram_id` (BigInteger, unique), `username`, `first_name`, `created_at`
-- [ ] `database/models/despesa.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
-- [ ] `database/models/receita.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
+- [X] `database/models/users.py`
+- [X] `database/models/accounts.py`
+- [X] `database/models/users-accounts.py`
+- [X] `database/models/expenses.py`
+- [X] `database/models/incomes.py`
 
 **Repositories (CRUD)**
-- [ ] `database/repositories/user_repo.py` — `get and create(telegram_id)`
+- [X] `database/repositories/user_repo.py` — `get and create(telegram_id)`
 - [ ] `database/repositories/despesa_repo.py` — `create`, `list_by_user`, `update`, `delete`
 - [ ] `database/repositories/receita_repo.py` — `create`, `list_by_user`, `update`, `delete`
 
