@@ -9,6 +9,7 @@ class Expenses(Base):
     expenses_id = Column(Integer, primary_key=True, autoincrement=True)
     account_id = Column(Integer, ForeignKey('accounts.account_id'), nullable=False)
     user_id = Column(Integer, ForeignKey('users.user_id'), nullable = False)
+    expenses_name = Column(String, nullable = False )
     value = Column(Float)
     type = Column(VARCHAR)
     category = Column(String)
