@@ -8,6 +8,7 @@ class Incomes(Base):
     incomes_id = Column(Integer, primary_key=True, autoincrement=True)
     account_id = Column(Integer, ForeignKey('accounts.account_id'), nullable=False)
     user_id = Column(Integer, ForeignKey('users.user_id'), nullable = False)
+    name = Column(String(255), nullable=False)
     value = Column(Float)   
     category = Column(String(255))
     type = Column(VARCHAR)
