@@ -53,12 +53,12 @@
 - [X] Criar `database/connection.py` — engine, `SessionLocal` e `Base`
 
 **Models**
-- [ ] `database/models/user.py` — `id`, `telegram_id` (BigInteger, unique), `username`, `first_name`, `created_at`
-- [ ] `database/models/despesa.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
-- [ ] `database/models/receita.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
+- [X] `database/models/user.py` — `id`, `telegram_id` (BigInteger, unique), `username`, `first_name`, `created_at`
+- [X] `database/models/despesa.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
+- [X] `database/models/receita.py` — `id`, `user_id` (FK), `valor`, `categoria`, `descricao`, `created_at`
 
 **Repositories (CRUD)**
-- [ ] `database/repositories/user_repo.py` — `get and create(telegram_id)`
+- [X] `database/repositories/user_repo.py` — `get and create(telegram_id)`
 - [ ] `database/repositories/despesa_repo.py` — `create`, `list_by_user`, `update`, `delete`
 - [ ] `database/repositories/receita_repo.py` — `create`, `list_by_user`, `update`, `delete`
 
