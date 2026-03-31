@@ -6,9 +6,9 @@ class Account(Base):
     __tablename__ = "accounts"
     account_id = Column(Integer,primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False)
+    password = Column(VARCHAR, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now())
-    password = Column(VARCHAR, nullable=False)
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
