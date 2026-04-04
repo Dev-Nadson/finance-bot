@@ -27,7 +27,7 @@ class Incomes(Base):
              'description': self.description,
              'created_at': self.created_at,
              'updated_at': self.updated_at,
-             'deleted_at': self.delete_at
+             'deleted_at': self.deleted_at
             }
 
 

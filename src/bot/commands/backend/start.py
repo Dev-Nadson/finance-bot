@@ -1,7 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from services.controllers.users.register_user import register_user
+from services.controllers.user_controller import register_user
 
 
 async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
