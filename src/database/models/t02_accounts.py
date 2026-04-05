@@ -1,23 +1,23 @@
-from sqlalchemy import Column, DateTime, Integer, String, func, VARCHAR, ForeignKey
+from sqlalchemy import VARCHAR, Column, DateTime, Integer, String, func
 
 from .db_config import Base, engine
 
+
 class Account(Base):
     __tablename__ = "accounts"
-    account_id = Column(Integer,primary_key=True, autoincrement=True)
+    account_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False)
     password = Column(VARCHAR, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now())
 
-
     def to_dict(self):
         return {
-            'id': self.account_id,
-            'name': self.name,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
-            'password': self.password
+            "id": self.account_id,
+            "name": self.name,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+            "password": self.password,
         }
 
 

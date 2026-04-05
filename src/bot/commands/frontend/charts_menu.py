@@ -7,8 +7,16 @@ async def _charts_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [
             [InlineKeyboardButton("💸 Gráfico de despesas geral", callback_data="expenses_chart")],
             [InlineKeyboardButton("💰 Gráifico de receitas geral", callback_data="incomes_chart")],
-            [InlineKeyboardButton("📊 Visualizar evolução de despesas mensal", callback_data="monthly_expenses_evolution")], # noqa E501
-            [InlineKeyboardButton( "📊 Visualizar evolução de receita mensal", callback_data="monthly_incomes_evolution")], # noqa E501
+            [
+                InlineKeyboardButton(
+                    "📊 Visualizar evolução de despesas mensal", callback_data="monthly_expenses_evolution"
+                )
+            ],  # noqa E501
+            [
+                InlineKeyboardButton(
+                    "📊 Visualizar evolução de receita mensal", callback_data="monthly_incomes_evolution"
+                )
+            ],  # noqa E501
         ]
     )
 

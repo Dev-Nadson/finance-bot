@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
 
 from config.libs.envroinments import env
 
@@ -10,8 +10,11 @@ engine = create_async_engine(
     connect_args={"check_same_thread": False},  # necessário para SQLite em contexto async
 )
 
-_SessionLocal = async_sessionmaker(bind=engine, class_=AsyncSession, autocommit=False, expire_on_commit=False, autoflush=False)
+_SessionLocal = async_sessionmaker(
+    bind=engine, class_=AsyncSession, autocommit=False, expire_on_commit=False, autoflush=False
+)
 Base = declarative_base()
+
 
 @asynccontextmanager
 async def get_session():

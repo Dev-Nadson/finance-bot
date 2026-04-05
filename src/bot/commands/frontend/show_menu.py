@@ -1,12 +1,16 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
+
 from services.controllers.balance import calculate_balance
+
+from .accounts_menu import _accounts_menu
 from .expenses_menu import _expenses_menu
 from .incomes_menu import _incomes_menu
-from .accounts_menu import _accounts_menu
+
 
 async def show_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await _show_main_menu(update, context)
+
 
 async def _show_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = InlineKeyboardMarkup(
@@ -18,11 +22,12 @@ async def _show_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ]
     )
     text = "Escolha uma opção do menu principal:"
-    
+
     if update.callback_query:
         await update.callback_query.edit_message_text(text, reply_markup=keyboard)
     else:
         await update.message.reply_text(text, reply_markup=keyboard)
+
 
 async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -45,11 +50,11 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if err:
             text = f"Erro ao calcular saldo:\n{err}"
         else:
-            text = f"📊 *SALDO GERAL*\n\n💰 Receitas: R$ {incomes:.2f}\n💸 Despesas: R$ {expenses:.2f}\n⚖️ Saldo: R$ {balance:.2f}"
-            
+            text = f"📊 *SALDO GERAL*\n\n💰 Receitas: R$ {incomes:.2f}\n💸 Despesas: R$ {expenses:.2f}\n⚖️ Saldo: R$ {balance:.2f}" # noqa E501
+
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Voltar", callback_data="menu_main")]])
         await query.edit_message_text(text, reply_markup=keyboard, parse_mode="Markdown")
-        
+
     # Accounts Menu Handlers
     elif data.startswith("acc_"):
         await _handle_accounts(update, context, data)
@@ -62,8 +67,10 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await query.message.reply_text("Opção desconhecida ou em desenvolvimento.")
 
+
 async def _handle_accounts(update, context, data):
     from services.controllers.account_controller import list_accounts
+
     query = update.callback_query
     user_id = str(update.effective_user.id)
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Voltar", callback_data="menu_contas")]])
@@ -81,9 +88,10 @@ async def _handle_accounts(update, context, data):
                     text += f"Nome: {a.get('name')} (ID: {a.get('id')})\n"
                 await query.edit_message_text(text, reply_markup=keyboard, parse_mode="Markdown")
 
+
 async def _handle_incomes(update, context, data):
     from services.controllers.income_controller import list_incomes
-    from services.controllers.account_controller import list_accounts
+
     query = update.callback_query
     user_id = str(update.effective_user.id)
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Voltar", callback_data="menu_receitas")]])
@@ -94,16 +102,17 @@ async def _handle_incomes(update, context, data):
             await query.edit_message_text(f"Erro: {err}", reply_markup=keyboard)
         else:
             if not incs:
-                await query.edit_message_text("Nenhuma receita." , reply_markup=keyboard)
+                await query.edit_message_text("Nenhuma receita.", reply_markup=keyboard)
             else:
                 text = "💰 *Suas Receitas:*\n\n"
                 for i in incs:
-                     text += f"R$ {i.get('value')} - {i.get('description')} (Cat: {i.get('category')})\n"
+                    text += f"R$ {i.get('value')} - {i.get('description')} (Cat: {i.get('category')})\n"
                 await query.edit_message_text(text, reply_markup=keyboard, parse_mode="Markdown")
-                
+
+
 async def _handle_expenses(update, context, data):
     from services.controllers.expense_controller import list_expenses
-    from services.controllers.account_controller import list_accounts
+
     query = update.callback_query
     user_id = str(update.effective_user.id)
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Voltar", callback_data="menu_despesas")]])
@@ -114,9 +123,9 @@ async def _handle_expenses(update, context, data):
             await query.edit_message_text(f"Erro: {err}", reply_markup=keyboard)
         else:
             if not exps:
-                await query.edit_message_text("Nenhuma despesa." , reply_markup=keyboard)
+                await query.edit_message_text("Nenhuma despesa.", reply_markup=keyboard)
             else:
                 text = "💸 *Suas Despesas:*\n\n"
                 for i in exps:
-                     text += f"R$ {i.get('value')} - {i.get('description')} (Cat: {i.get('category')})\n"
+                    text += f"R$ {i.get('value')} - {i.get('description')} (Cat: {i.get('category')})\n"
                 await query.edit_message_text(text, reply_markup=keyboard, parse_mode="Markdown")
