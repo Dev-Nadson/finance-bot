@@ -8,7 +8,7 @@ async def _expenses_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton("💸 Nova despesa", callback_data="add_despesa")],
             [InlineKeyboardButton("💰 Editar despesa", callback_data="add_receita")],
             [InlineKeyboardButton("📊 Visualizar despesas", callback_data="show_balance")],
-            [InlineKeyboardButton("📊 Excluir despesa", callback_data="delete_balance")],
+            [InlineKeyboardButton("🗑️ Excluir despesa", callback_data="delete_balance")],
         ]
     )
     if update.callback_query:
