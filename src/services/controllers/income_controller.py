@@ -1,5 +1,5 @@
-from services.repositories.accounts.crud import list_accounts_repo
-from services.repositories.incomes.crud import create_income_repo, list_incomes_repo
+from services.repositories.accounts_repository import list_accounts_repo
+from services.repositories.incomes_repository import create_income_repo, list_incomes_repo
 from telegram import Update
 from telegram.ext import (
     CallbackQueryHandler,

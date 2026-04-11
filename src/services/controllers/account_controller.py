@@ -1,4 +1,4 @@
-from services.repositories.accounts.crud import create_account_repo, list_accounts_repo
+from services.repositories.accounts_repository import create_account_repo, list_accounts_repo
 from telegram import Update
 from telegram.ext import (
     CallbackQueryHandler,
@@ -22,7 +22,6 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def start_account(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # Shorthand check
     if context.args and len(context.args) >= 2:
         name = context.args[0]
         password = " ".join(context.args[1:])
