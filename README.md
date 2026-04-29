@@ -43,7 +43,7 @@
 ### 🗄️ Backend (Banco de Dados, Modelos & Serviços)
 
 **Configuração do ambiente**
-- [X] Adicionar `sqlalchemy`, `alembic` e ao `pyproject.toml`
+- [X] Adicionar `sqlalchemy` e ao `pyproject.toml`
 - [X] Adicionar `SQL_ALCHEMY_DATABASE_URL` ao `.env.example` e ao modelo `envConfig`
 - [X] Criar `database/connection.py` — engine, `SessionLocal` e `Base`
 
