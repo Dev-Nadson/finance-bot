@@ -1,6 +1,6 @@
 # 💸 Finance Bot
 
-**Bot de finanças pessoais para Telegram com suporte a IA, gráficos e controle de receitas e despesas.**
+**Bot de finanças pessoais para Telegram com suporte a IA, gráficos e controle de contas, receitas e despesas.**
 
 ---
 
@@ -12,22 +12,17 @@
 
 **Setup inicial**
 - [X] Criar handler de `/start` com mensagem de boas-vindas e menu de comandos
-- [X] Criar função para inserir o usuário no banco de dados no primeiro `/start`
+- [X] Criar funcionalidade para inserir o usuário no banco de dados no primeiro `/start`
 
-**Geral**aiosqlite
-- [ ] `/saldo` — buscar e exibir saldo atual (receitas - despesas)
+**Geral**
+- [X] `/menu` — Menu principal interativo
+- [X] `/help` — Mensagem de ajuda detalhada
+- [X] `/saldo` — Buscar e exibir saldo atual (através do controller de balanço)
 
-**Despesas**
-- [ ] `/despesa` — listar todas as despesas do usuário
-- [ ] `/despesa-new <valor> <categoria> [descrição]` — registrar nova despesa via linha única
-- [ ] `/despesa-edit <id> <campo> <novo_valor>` — editar despesa existente
-- [ ] `/despesa-remove <id>` — remover despesa por ID
-
-**Receitas**
-- [ ] `/receita` — listar todas as receitas do usuário
-- [ ] `/receita-new <valor> <categoria> [descrição]` — registrar nova receita
-- [ ] `/receita-edit <id> <campo> <novo_valor>` — editar receita existente
-- [ ] `/receita-remove <id>` — remover receita por ID
+**Gerenciamento de Dados (Conversations)**
+- [X] Fluxo de criação/edição/remoção de **Contas**
+- [X] Fluxo de criação/edição/remoção de **Despesas**
+- [X] Fluxo de criação/edição/remoção de **Receitas**
 
 **Gráficos**
 - [ ] `/geral` — gráfico geral com saldo, total gasto e total de despesas
@@ -39,9 +34,9 @@
 - [ ] `/exportar` — exportar relatório financeiro em PDF ou texto
 
 **Validação & Erros**
-- [ ] Criar função `parse_args()` com `shlex` + Pydantic para todos os comandos de entrada
-- [ ] Padronizar mensagens de erro com formato de ajuda inline (ex: `❌ Use: /despesa-new 100 energia fixo`)
-- [ ] Adicionar `try/except` em todos os handlers com feedback ao usuário
+- [X] Integração de controllers com handlers do bot
+- [X] Padronizar mensagens de feedback ao usuário
+- [ ] Adicionar `try/except` nos controllers para tratamento de erros
 
 ---
 
@@ -79,35 +74,16 @@
 - [ ] Substituir driver por `psycopg2` ou `asyncpg`
 
 ---
+
 ## 🚀 Guia de Comandos
 
 ### 💰 Geral
 | Comando | Descrição |
 |---|---|
-| `/start` | Inicia o bot e exibe o menu principal |
-| `/saldo` | Exibe o saldo atual (receitas − despesas) |
-| `/resumo` | Resumo financeiro do mês gerado por IA |
-| `/exportar` | Exporta relatório financeiro |
-
-### 📉 Despesas
-| Comando | Descrição |
-|---|---|
-| `/despesa` | Lista todas as despesas |
-| `/despesa-new <valor> <categoria> [descrição]` | Cadastra uma nova despesa |
-| `/despesa-edit <id> <campo> <novo_valor>` | Edita uma despesa existente |
-| `/despesa-remove <id>` | Remove uma despesa |
-
-> Exemplo: `/despesa-new 150 alimentação "mercado da semana"`
-
-### 📈 Receitas
-| Comando | Descrição |
-|---|---|
-| `/receita` | Lista todas as receitas |
-| `/receita-new <valor> <categoria> [descrição]` | Cadastra uma nova receita |
-| `/receita-edit <id> <campo> <novo_valor>` | Edita uma receita existente |
-| `/receita-remove <id>` | Remove uma receita |
-
-> Exemplo: `/receita-new 3000 salário "pagamento mensal"`
+| `/start` | Inicia o bot e exibe a mensagem de boas-vindas |
+| `/menu` | Menu principal interativo (Contas, Receitas, Despesas) |
+| `/help` | Guia de ajuda detalhado |
+| `/saldo` | Exibe o saldo atual consolidado |
 
 ### 📊 Gráficos
 | Comando | Descrição |
@@ -125,13 +101,10 @@ finance-bot/
 ├── src/
 │   ├── main.py                         # Ponto de entrada da aplicação
 │   ├── bot/
-│   │   ├── app.py                      # Registro de handlers do bot
-│   │   ├── setup.py                    # Inicialização da instância do TeleBot
-│   │   └── commands/
-│   │       └── v1/
-│   │           ├── __init__.py         # Exporta os handlers da versão 1
-│   │           ├── start_help.py       # Handler do comando /start
-│   │           └── send_chart.py       # Handler do comando /chart
+│   │   ├── app.py                      # Registro de todos os handlers
+│   │   └── commands/                   # Lógica dos comandos separada por contexto
+│   │       ├── backend/                # Comandos base (start, charts)
+│   │       └── frontend/               # Menus e mensagens de ajuda
 │   ├── config/
 │   │   ├── libs/
 │   │   │   ├── envroinments.py         # Carrega variáveis de ambiente com dotenv
@@ -140,11 +113,11 @@ finance-bot/
 │   │   └── schemas/
 │   │       └── classes.py              # Modelos Pydantic (ex: envConfig)
 │   └── services/
-│       └── charts.py                   # Geração de gráficos com Matplotlib
-├── .env.example                        # Exemplo de variáveis de ambiente
-├── .gitignore
-├── .python-version                     # Versão do Python (3.12)
-├── pyproject.toml                      # Dependências e configurações do projeto
+│       ├── controllers/                # Lógica de negócio e conversas (Account, Expense, etc.)
+│       ├── repositories/               # Camada de acesso ao banco de dados
+│       └── reports/                    # Geração de gráficos (charts.py)
+├── .env.example
+├── pyproject.toml
 └── README.md
 ```
 
@@ -152,13 +125,13 @@ finance-bot/
 
 ## 🏗️ Arquitetura
 
-O projeto segue uma separação clara de responsabilidades dividida em três camadas principais:
+O projeto segue o padrão de **Camadas** com foco em separação de responsabilidades:
 
-**`bot/`** — Camada de interface com o Telegram. O arquivo `setup.py` instancia o `TeleBot` de forma centralizada, evitando importações circulares. O arquivo `app.py` registra os handlers e os conecta aos comandos. Os comandos ficam organizados por versão dentro de `commands/v1/`.
-
-**`config/`** — Camada de configuração e infraestrutura. Carrega as variáveis de ambiente via `dotenv`, valida-as com um modelo Pydantic (`envConfig`) e expõe clientes prontos para uso das APIs externas (Groq e OpenAI).
-
-**`services/`** — Camada de lógica e serviços reutilizáveis. Atualmente contém a geração de gráficos com Matplotlib. Aqui ficarão os serviços de IA, relatórios e regras de negócio financeiras.
+- **`bot/`**: Interface com o Telegram. Utiliza `python-telegram-bot` e organiza comandos em contextos de frontend (UI/Menus) e backend (Ações diretas).
+- **`services/controllers/`**: Contém a lógica de negócio e gerencia as conversas (ConversationHandler) para entrada de dados.
+- **`services/repositories/`**: Abstração da camada de dados. Realiza consultas ao banco utilizando SQLAlchemy.
+- **`database/models/`**: Definições das tabelas e esquemas do banco SQLite/Postgres.
+- **`config/`**: Gerenciamento de ambiente e clientes de APIs externas de forma centralizada.
 
 ---
 
@@ -191,7 +164,7 @@ cp .env.example .env
 ```
 
 ```env
-SQL_ALCHEMY_DATABASE_URL=caminho_do_banco
+SQL_ALCHEMY_DATABASE_URL=sqlite+aiosqlite:///database.db
 TELEGRAM_BOT_TOKEN=seu_token_aqui
 GROQ_API_KEY=sua_chave_groq_aqui
 OPENAI_API_KEY=sua_chave_openai_aqui
@@ -222,7 +195,7 @@ uv run task lint-format
 
 | Variável | Descrição |
 |---|---|
-| `SQL_ALCHEMY_DATABASE_URL` | Caminho do banco de dados SQLite |
+| `SQL_ALCHEMY_DATABASE_URL` | URL de conexão com o banco de dados |
 | `TELEGRAM_BOT_TOKEN` | Token do bot gerado pelo [@BotFather](https://t.me/BotFather) |
 | `GROQ_API_KEY` | Chave de acesso à API da [Groq](https://console.groq.com/) |
 | `OPENAI_API_KEY` | Chave de acesso à API da [OpenAI](https://platform.openai.com/) |
@@ -231,10 +204,12 @@ uv run task lint-format
 
 ## 🛠️ Tecnologias
 
-- **[pyTelegramBotAPI](https://github.com/eternnoir/pyTelegramBotAPI)** — Interface com a API do Telegram
+- **[python-telegram-bot](https://python-telegram-bot.org/)** — Framework para o bot do Telegram
+- **[SQLAlchemy](https://www.sqlalchemy.org/)** — ORM para banco de dados
+- **[aiosqlite](https://github.com/omnilib/aiosqlite)** — Driver assíncrono para SQLite
 - **[Matplotlib](https://matplotlib.org/)** — Geração de gráficos
-- **[Groq](https://groq.com/)** — Inferência de IA de alta velocidade (LLaMA)
-- **[OpenAI](https://openai.com/)** — Integração com modelos GPT
+- **[Groq](https://groq.com/)** — Integração com Modelos de Linguagem (LLMs)
+- **[OpenAI](https://openai.com/)** — Integração com Modelos de Linguagem (LLMs)
 - **[Pydantic](https://docs.pydantic.dev/)** — Validação de configurações
-- **[uv](https://docs.astral.sh/uv/)** — Gerenciamento de dependências e ambiente virtual
-- **[Ruff](https://docs.astral.sh/ruff/)** — Linter e formatter Python
+- **[uv](https://docs.astral.sh/uv/)** — Gerenciamento de dependências ultra-rápido
+- **[Ruff](https://docs.astral.sh/ruff/)** — Linter e formatter de alta performance
