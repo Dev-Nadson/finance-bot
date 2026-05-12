@@ -18,6 +18,8 @@ dependencies = [
 [dependency-groups]
 dev = [
     "hupper>=1.12.1",
+    "mkdocs-material>=9.7.6",
+    "mkdocstrings[python]>=1.0.4",
     "ruff>=0.15.6",
     "taskipy>=1.14.1",
 ]

@@ -1,0 +1,45 @@
+site_name: Finance Bot 💸
+site_description: Documentação do bot de finanças pessoais com IA.
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    # - navigation.tabs              # Menu horizontal no topo
+    - navigation.sections          # Agrupa itens no menu lateral
+    - navigation.top               # Botão "Voltar ao topo"
+    - navigation.tracking          # Atualiza a URL conforme o scroll
+    - navigation.indexes           # Permite clicar em seções pai
+    - search.highlight             # Destaca o termo buscado
+    - search.share
+    - content.code.copy          # Botão "Copiar código" nos blocos de código
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          setup_commands:
+            - import sys
+            - sys.path.append(".")
+
+nav:
+  - Início: index.md
+  - Funcionalidades: features.md
+  - Configuração: setup.md
+  - Arquitetura: architecture.md
+  - Changelog: changelog.md
