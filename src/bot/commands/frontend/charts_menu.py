@@ -1,7 +1,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
-
+'''
 async def _charts_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = InlineKeyboardMarkup(
         [
@@ -24,7 +24,7 @@ async def _charts_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.callback_query.edit_message_text("Escolha uma opção:", reply_markup=keyboard)
     else:
         await update.message.reply_text("Escolha uma opção:", reply_markup=keyboard)
-
+'''
 
 async def handle_charts_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -38,3 +38,26 @@ async def handle_charts_callback(update: Update, context: ContextTypes.DEFAULT_T
     }
 
     await query.message.reply_text(responses.get(query.data, "Opção desconhecida."))
+
+
+async def handle_charts_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    base_url = "http://localhost:5000"
+
+    links = {
+        "expenses_chart": f"{base_url}/despesas",
+        "incomes_chart": f"{base_url}/receitas",
+        "monthly_expenses_evolution": f"{base_url}/evolucao-despesas",
+        "monthly_incomes_evolution": f"{base_url}/evolucao-receitas",
+    }
+
+    url = links.get(query.data)
+
+    if url:
+        await query.message.reply_text(
+            f"📊 Veja seu gráfico aqui:\n{url}"
+        )
+    else:
+        await query.message.reply_text("Opção desconhecida.")
