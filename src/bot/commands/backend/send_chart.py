@@ -8,16 +8,16 @@ from services.reports.charts import generate_lines_chart
 async def send_chart(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chart_file = generate_lines_chart(
         ChartLinesData(
-            title="Vendas por Canal — 2024",
-            x_values=["Q1", "Q2", "Q3", "Q4"],
+            title="GASTOS POR MÊS",
+            x_values=["SEM 1", "SEM 2", "SEM 3", "SEM 4"],
             y_values=[
-                [120, 145, 162, 190],
-                [80, 95, 110, 140],
-                [55, 70, 88, 105],
+                [10, 20, 30, 40],
+                [15, 25, 35, 45],
+                [20, 30, 40, 50],
             ],
-            xlabel="Trimestre",
+            xlabel="Mensal",
             ylabel="Unidades",
-            series_labels=["Online", "Loja Física", "Parceiros"],
+            series_labels=["Alimentação", "Lazer", "Necessidades Básicas"],
         )
     )
     await update.message.reply_photo(chart_file, caption="Aqui está o seu gráfico! 📈")

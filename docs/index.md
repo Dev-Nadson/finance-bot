@@ -23,6 +23,7 @@ Nesta documentação, você encontrará todas as informações necessárias para
 
 O objetivo principal é fornecer uma ferramenta de código aberto que permita a qualquer pessoa ter um controle financeiro rigoroso sem a necessidade de planilhas complexas ou aplicativos pesados, utilizando a familiaridade do Telegram e o auxílio de IA para insights inteligentes.
 erenciamento de ambiente virtual e pacotes.
+
 - **[Ruff](https://docs.astral.sh/ruff/)**: Linter e formatação de código.
 
 # API Reference
