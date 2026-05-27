@@ -1,63 +1,25 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
-'''
-async def _charts_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+async def charts_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = InlineKeyboardMarkup(
         [
-            [InlineKeyboardButton("💸 Gráfico de despesas geral", callback_data="expenses_chart")],
-            [InlineKeyboardButton("💰 Gráifico de receitas geral", callback_data="incomes_chart")],
-            [
-                InlineKeyboardButton(
-                    "📊 Visualizar evolução de despesas mensal", callback_data="monthly_expenses_evolution"
-                )
-            ],  # noqa E501
-            [
-                InlineKeyboardButton(
-                    "📊 Visualizar evolução de receita mensal", callback_data="monthly_incomes_evolution"
-                )
-            ],  # noqa E501
+            [InlineKeyboardButton("🥧 Despesas por Categoria", callback_data="chart_pie_expenses")],
+            [InlineKeyboardButton("📈 Evolução de Despesas", callback_data="chart_line_expenses")],
+            [InlineKeyboardButton("📈 Evolução de Receitas", callback_data="chart_line_incomes")],
+            [InlineKeyboardButton("🔙 Voltar", callback_data="menu_main")],
         ]
     )
-
+    text = "📊 *Gráficos*\n\nEscolha o gráfico:"
     if update.callback_query:
-        await update.callback_query.edit_message_text("Escolha uma opção:", reply_markup=keyboard)
+        await update.callback_query.edit_message_text(text, reply_markup=keyboard, parse_mode="Markdown")
     else:
-        await update.message.reply_text("Escolha uma opção:", reply_markup=keyboard)
-'''
-
-async def handle_charts_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    await query.answer()
-
-    responses = {
-        "add_despesa": "Digite o valor da despesa:",
-        "add_receita": "Digite o valor da receita:",
-        "show_balance": "Consultando saldo...",
-        "delete_balance": "Excluindo despesa...",
-    }
-
-    await query.message.reply_text(responses.get(query.data, "Opção desconhecida."))
+        await update.message.reply_text(text, reply_markup=keyboard, parse_mode="Markdown")
 
 
 async def handle_charts_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Fallback handler — chart callbacks are now handled by handle_callback in show_menu."""
     query = update.callback_query
     await query.answer()
-
-    base_url = "http://localhost:5000"
-
-    links = {
-        "expenses_chart": f"{base_url}/despesas",
-        "incomes_chart": f"{base_url}/receitas",
-        "monthly_expenses_evolution": f"{base_url}/evolucao-despesas",
-        "monthly_incomes_evolution": f"{base_url}/evolucao-receitas",
-    }
-
-    url = links.get(query.data)
-
-    if url:
-        await query.message.reply_text(
-            f"📊 Veja seu gráfico aqui:\n{url}"
-        )
-    else:
-        await query.message.reply_text("Opção desconhecida.")
+    await query.message.reply_text("Use /menu → Gráficos para visualizar seus dados.")

@@ -1,18 +1,14 @@
-from services.controllers.expense_controller import list_expenses
-from services.controllers.income_controller import list_incomes
+from services.financeiro import calculate_balance as _calculate_balance
+from services.controllers.login_controller import _ensure_active_account
 
 
-async def calculate_balance(telegram_id: str):
-    incomes, i_error = await list_incomes(telegram_id)
-    expenses, e_error = await list_expenses(telegram_id)
+async def calculate_balance(telegram_id: str, context=None):
+    """Calculate balance for the active account of the user."""
+    account_id = None
+    if context is not None:
+        account_id = await _ensure_active_account(telegram_id, context)
 
-    if i_error or e_error:
-        error_msg = f"{i_error or ''} {e_error or ''}".strip()
-        return 0, 0, 0, error_msg
+    if account_id is None:
+        return 0, 0, 0, "Nenhuma conta ativa encontrada."
 
-    total_incomes = sum([inc.get("value", 0) for inc in incomes])
-    total_expenses = sum([exp.get("value", 0) for exp in expenses])
-
-    balance = total_incomes - total_expenses
-
-    return total_incomes, total_expenses, balance, None
+    return await _calculate_balance(account_id)

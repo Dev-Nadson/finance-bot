@@ -60,13 +60,17 @@ async def create_income_repo(
         return income.to_dict(), None
 
 
-async def list_incomes_repo(telegram_id: str):
+async def list_incomes_repo(telegram_id: str, account_id: int | None = None):
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
             return [], "Usuário não encontrado."
 
-        incomes = (await session.execute(select(Incomes).filter_by(user_id=user.user_id))).scalars().all()
+        filters = {"user_id": user.user_id}
+        if account_id is not None:
+            filters["account_id"] = account_id
+
+        incomes = (await session.execute(select(Incomes).filter_by(**filters))).scalars().all()
         return [inc.to_dict() for inc in incomes], None
 
 
@@ -84,3 +88,31 @@ async def delete_income_repo(income_id: int, telegram_id: str):
 
         await session.delete(income)
         return True, None
+
+
+async def update_income_repo(
+    income_id: int,
+    telegram_id: str,
+    value: float | None = None,
+    category: str | None = None,
+    description: str | None = None,
+):
+    async with get_session() as session:
+        user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
+        if not user:
+            return None, "Usuário não encontrado."
+
+        income = (
+            await session.execute(select(Incomes).filter_by(incomes_id=income_id, user_id=user.user_id))
+        ).scalar_one_or_none()
+        if not income:
+            return None, "Receita não encontrada ou sem permissão."
+
+        if value is not None:
+            income.value = value
+        if category is not None:
+            income.category = category
+        if description is not None:
+            income.description = description
+
+        return income.to_dict(), None

@@ -87,3 +87,31 @@ async def delete_account_repo(account_id: int, telegram_id: str):
 
         # Also could delete related incomes and expenses, but skipping for simplicity or db cascades handles it.
         return True, None
+
+
+async def login_account_repo(account_name: str, password: str, telegram_id: str):
+    """Verify account credentials and link the user to the account if not already linked."""
+    async with get_session() as session:
+        user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
+        if not user:
+            return None, "Usuário não encontrado."
+
+        account = (await session.execute(select(Account).filter_by(name=account_name))).scalar_one_or_none()
+        if not account:
+            return None, "Conta não encontrada."
+
+        if account.password != password:
+            return None, "Senha incorreta."
+
+        # Check if user is already linked to this account
+        existing_link = (
+            await session.execute(
+                select(UserAccounts).filter_by(user_id=user.user_id, account_id=account.account_id)
+            )
+        ).scalar_one_or_none()
+
+        if not existing_link:
+            new_link = UserAccounts(user_id=user.user_id, account_id=account.account_id)
+            session.add(new_link)
+
+        return account.to_dict(), None

@@ -61,13 +61,17 @@ async def create_expense_repo(
         return expense.to_dict(), None
 
 
-async def list_expenses_repo(telegram_id: str):
+async def list_expenses_repo(telegram_id: str, account_id: int | None = None):
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
             return [], "Usuário não encontrado."
 
-        expenses = (await session.execute(select(Expenses).filter_by(user_id=user.user_id))).scalars().all()
+        filters = {"user_id": user.user_id}
+        if account_id is not None:
+            filters["account_id"] = account_id
+
+        expenses = (await session.execute(select(Expenses).filter_by(**filters))).scalars().all()
         return [ex.to_dict() for ex in expenses], None
 
 
@@ -85,3 +89,31 @@ async def delete_expense_repo(expense_id: int, telegram_id: str):
 
         await session.delete(expense)
         return True, None
+
+
+async def update_expense_repo(
+    expense_id: int,
+    telegram_id: str,
+    value: float | None = None,
+    category: str | None = None,
+    description: str | None = None,
+):
+    async with get_session() as session:
+        user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
+        if not user:
+            return None, "Usuário não encontrado."
+
+        expense = (
+            await session.execute(select(Expenses).filter_by(expenses_id=expense_id, user_id=user.user_id))
+        ).scalar_one_or_none()
+        if not expense:
+            return None, "Despesa não encontrada ou sem permissão."
+
+        if value is not None:
+            expense.value = value
+        if category is not None:
+            expense.category = category
+        if description is not None:
+            expense.description = description
+
+        return expense.to_dict(), None
