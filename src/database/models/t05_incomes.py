@@ -34,4 +34,4 @@ class Incomes(Base):
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
-    print("\033[32mIncomes table created successfully.\033[0m")  # os números são para deixar verde
+    print("\033[32mIncomes table created successfully.\033[0m")

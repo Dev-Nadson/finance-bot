@@ -79,13 +79,10 @@ async def delete_account_repo(account_id: int, telegram_id: str):
             return False, "Conta não pertence a este usuário ou já foi excluída."
 
         await session.delete(user_account)
-        # Assuming we don't delete the account itself to avoid breaking records history for other users,
-        # or we delete it if the user is the only owner. Let's delete it for simplicity if he owns it.
         account = (await session.execute(select(Account).filter_by(account_id=account_id))).scalar_one_or_none()
         if account:
             await session.delete(account)
 
-        # Also could delete related incomes and expenses, but skipping for simplicity or db cascades handles it.
         return True, None
 
 
@@ -103,7 +100,6 @@ async def login_account_repo(account_name: str, password: str, telegram_id: str)
         if account.password != password:
             return None, "Senha incorreta."
 
-        # Check if user is already linked to this account
         existing_link = (
             await session.execute(
                 select(UserAccounts).filter_by(user_id=user.user_id, account_id=account.account_id)

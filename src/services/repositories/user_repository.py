@@ -9,7 +9,6 @@ async def create_user_repository(user_name: str, telegram_id: str):
         user_exists = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
 
         if user_exists is not None:
-            print(user_exists.to_dict())  # dev
             return 409
         else:
             user = User(name=user_name, telegram_id=telegram_id)

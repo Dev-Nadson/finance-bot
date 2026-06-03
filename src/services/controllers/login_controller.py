@@ -62,12 +62,10 @@ async def login_pass(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def _ensure_active_account(telegram_id: str, context: ContextTypes.DEFAULT_TYPE) -> int | None:
-    """Return active_account_id from user_data, or auto-select the first account."""
     active_id = context.user_data.get("active_account_id")
     if active_id:
         return active_id
 
-    # Auto-select first linked account
     accounts, _ = await list_accounts_repo(telegram_id)
     if accounts:
         context.user_data["active_account_id"] = accounts[0]["id"]

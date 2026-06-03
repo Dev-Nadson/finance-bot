@@ -30,7 +30,6 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-# ── Create ─────────────────────────────────────────────────────────────────────
 
 async def start_expense(update: Update, context: ContextTypes.DEFAULT_TYPE):
     telegram_id = str(update.effective_user.id)
@@ -106,9 +105,15 @@ async def exp_category(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if err:
             await query.edit_message_text(f"Erro ao registrar despesa: {err}")
         else:
+            from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+            keyboard = InlineKeyboardMarkup([
+                [InlineKeyboardButton("💸 Mais Despesas", callback_data="menu_despesas"),
+                 InlineKeyboardButton("🏠 Menu", callback_data="menu_main")]
+            ])
             await query.edit_message_text(
-                f"✅ Despesa *{name}* de R$ {value:.2f} ({category}) registrada com sucesso!",
+                f"✅ Despesa *{name}* de R$ {value:.2f} ({category}) registrada!",
                 parse_mode="Markdown",
+                reply_markup=keyboard
             )
     except Exception as e:
         await query.edit_message_text(f"Erro inesperado: {e}")
@@ -118,7 +123,6 @@ async def exp_category(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-# ── Edit ───────────────────────────────────────────────────────────────────────
 
 async def start_edit_expense(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -157,7 +161,6 @@ async def exp_edit_field(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
 
     if data in category_map:
-        # Apply category change directly
         telegram_id = str(update.effective_user.id)
         expense_id = context.user_data.pop("edit_expense_id", None)
         new_category = category_map[data]
@@ -209,8 +212,6 @@ async def exp_edit_value(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-# ── Delete ─────────────────────────────────────────────────────────────────────
-
 async def start_delete_expense(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -261,13 +262,9 @@ async def exp_delete_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE)
     return ConversationHandler.END
 
 
-# ── List ───────────────────────────────────────────────────────────────────────
-
 async def list_expenses(telegram_id: str, account_id: int | None = None):
     return await list_expenses_repo(telegram_id, account_id)
 
-
-# ── Handler ────────────────────────────────────────────────────────────────────
 
 def get_expense_handler():
     return ConversationHandler(

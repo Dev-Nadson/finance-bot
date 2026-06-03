@@ -94,7 +94,7 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def _handle_accounts(update, context, data):
     from services.controllers.account_controller import list_accounts
-    from services.controllers.login_controller import get_login_handler  # noqa — imported for side effect
+    from services.controllers.login_controller import get_login_handler  # noqa
 
     query = update.callback_query
     user_id = str(update.effective_user.id)
@@ -143,6 +143,12 @@ async def _handle_accounts(update, context, data):
         else:
             await query.edit_message_text("Conta não encontrada.", reply_markup=keyboard)
 
+    elif data in ("acc_add", "acc_login"):
+        await query.answer(
+            "Você já está no meio de outra operação. Envie /cancelar e tente novamente.",
+            show_alert=True
+        )
+
 
 async def _handle_incomes(update, context, data):
     from services.controllers.income_controller import list_incomes
@@ -163,6 +169,12 @@ async def _handle_incomes(update, context, data):
             for i in incs:
                 text += f"• #{i.get('incomes_id')} R$ {i.get('value'):.2f} — {i.get('description')} ({i.get('type')})\n"
             await query.edit_message_text(text, reply_markup=keyboard, parse_mode="Markdown")
+
+    elif data in ("inc_edit", "inc_delete"):
+        await query.answer(
+            "Conclua ou cancele a operação atual. Envie /cancelar.",
+            show_alert=True
+        )
 
 
 async def _handle_expenses(update, context, data):
@@ -188,6 +200,12 @@ async def _handle_expenses(update, context, data):
                 cat = e.get('category')
                 text += f"• #{exp_id} R$ {val:.2f} — {desc} [{cat}]\n"
             await query.edit_message_text(text, reply_markup=keyboard, parse_mode="Markdown")
+
+    elif data in ("exp_edit", "exp_delete"):
+        await query.answer(
+            "Conclua ou cancele a operação atual. Envie /cancelar.",
+            show_alert=True
+        )
 
 
 async def _handle_charts(update, context, data):
@@ -222,6 +240,14 @@ async def _handle_charts(update, context, data):
         )
         await query.message.reply_photo(chart, caption="🥧 Despesas por categoria")
 
+        nav_keyboard = InlineKeyboardMarkup([
+            [
+                InlineKeyboardButton("📊 Mais Gráficos", callback_data="menu_charts"),
+                InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+            ]
+        ])
+        await query.message.reply_text("Escolha outra opção:", reply_markup=nav_keyboard)
+
     elif data == "chart_line_expenses":
         await query.message.reply_text("⏳ Gerando gráfico de evolução de despesas...")
         labels, totals = await monthly_expenses_evolution(account_id)
@@ -239,6 +265,14 @@ async def _handle_charts(update, context, data):
         )
         await query.message.reply_photo(chart, caption="📈 Evolução mensal de despesas")
 
+        nav_keyboard = InlineKeyboardMarkup([
+            [
+                InlineKeyboardButton("📊 Mais Gráficos", callback_data="menu_charts"),
+                InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+            ]
+        ])
+        await query.message.reply_text("Escolha outra opção:", reply_markup=nav_keyboard)
+
     elif data == "chart_line_incomes":
         await query.message.reply_text("⏳ Gerando gráfico de evolução de receitas...")
         labels, totals = await monthly_incomes_evolution(account_id)
@@ -255,3 +289,11 @@ async def _handle_charts(update, context, data):
             )
         )
         await query.message.reply_photo(chart, caption="📈 Evolução mensal de receitas")
+
+        nav_keyboard = InlineKeyboardMarkup([
+            [
+                InlineKeyboardButton("📊 Mais Gráficos", callback_data="menu_charts"),
+                InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+            ]
+        ])
+        await query.message.reply_text("Escolha outra opção:", reply_markup=nav_keyboard)

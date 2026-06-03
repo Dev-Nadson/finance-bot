@@ -9,7 +9,6 @@ from services.controllers.login_controller import get_login_handler
 
 
 def register_handlers(app: Application):
-    # Conversations — must be registered before generic CallbackQueryHandlers
     app.add_handler(get_login_handler())
     app.add_handler(get_account_handler())
     app.add_handler(get_expense_handler())
@@ -24,3 +23,4 @@ def register_handlers(app: Application):
     app.add_handler(CommandHandler("start", back.send_welcome))
     app.add_handler(CommandHandler("chart", back.send_chart))
     app.add_handler(CommandHandler("chart2", back.send_pie_chart))
+    app.add_handler(CommandHandler("saldo", back.send_saldo))

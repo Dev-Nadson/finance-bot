@@ -18,7 +18,6 @@ async def send_chart(update: Update, context: ContextTypes.DEFAULT_TYPE):
     exp_labels, exp_totals = await monthly_expenses_evolution(account_id)
     inc_labels, inc_totals = await monthly_incomes_evolution(account_id)
 
-    # Merge all labels
     all_labels = sorted(set(exp_labels) | set(inc_labels))
     if not all_labels:
         await update.message.reply_text("Nenhum dado disponível para gerar o gráfico.")

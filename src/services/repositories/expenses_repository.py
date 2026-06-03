@@ -15,10 +15,10 @@ async def create_expenses_repository(
         user_exists = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
 
         if account_exists is None:
-            print("Erro: Conta não encontrada")  # to_dict
+            print("Erro: Conta não encontrada")
             return 404
         if user_exists is None:
-            print("Usuario não encontrado")  # to_dict
+            print("Usuario não encontrado")
             return 404
         if account_exists.user_id != user_exists.user_id:  # verifica se a conta é do usuario
             print(f"Segurança: Usuário {telegram_id} tentou acessar conta de terceiros")

@@ -28,8 +28,6 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-# ── Create ─────────────────────────────────────────────────────────────────────
-
 async def start_income(update: Update, context: ContextTypes.DEFAULT_TYPE):
     telegram_id = str(update.effective_user.id)
     try:
@@ -89,9 +87,15 @@ async def inc_type_step(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if err:
             await update.message.reply_text(f"Erro ao registrar receita: {err}")
         else:
+            from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+            keyboard = InlineKeyboardMarkup([
+                [InlineKeyboardButton("💰 Mais Receitas", callback_data="menu_receitas"),
+                 InlineKeyboardButton("🏠 Menu", callback_data="menu_main")]
+            ])
             await update.message.reply_text(
-                f"✅ Receita *{name}* de R$ {value:.2f} registrada com sucesso!",
+                f"✅ Receita *{name}* de R$ {value:.2f} registrada!",
                 parse_mode="Markdown",
+                reply_markup=keyboard
             )
     except Exception as e:
         await update.message.reply_text(f"Erro inesperado: {e}")
@@ -100,8 +104,6 @@ async def inc_type_step(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data.pop(key, None)
     return ConversationHandler.END
 
-
-# ── Edit ───────────────────────────────────────────────────────────────────────
 
 async def start_edit_income(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -162,8 +164,6 @@ async def inc_edit_value(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-# ── Delete ─────────────────────────────────────────────────────────────────────
-
 async def start_delete_income(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -213,13 +213,9 @@ async def inc_delete_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE)
     return ConversationHandler.END
 
 
-# ── List ───────────────────────────────────────────────────────────────────────
-
 async def list_incomes(telegram_id: str, account_id: int | None = None):
     return await list_incomes_repo(telegram_id, account_id)
 
-
-# ── Handler ────────────────────────────────────────────────────────────────────
 
 def get_income_handler():
     return ConversationHandler(
