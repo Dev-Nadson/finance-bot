@@ -23,6 +23,6 @@ async def send_ai_analysis(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         text = await generate_financial_report(telegram_id, account_id, month, year)
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🏠 Menu Principal", callback_data="menu_main")]])
-        await update.message.reply_text(text, parse_mode="Markdown", reply_markup=keyboard)
+        await update.message.reply_text(text, parse_mode="HTML", reply_markup=keyboard)
     except Exception as e:
         await update.message.reply_text(f"❌ Erro ao gerar análise: {e}")

@@ -394,6 +394,6 @@ async def _handle_ai_report(update, context):
         text = await generate_financial_report(telegram_id, account_id, month, year)
         
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Voltar", callback_data="menu_main")]])
-        await query.message.reply_text(text, reply_markup=keyboard, parse_mode="Markdown")
+        await query.message.reply_text(text, reply_markup=keyboard, parse_mode="HTML")
     except Exception as e:
         await update.effective_message.reply_text(f"Erro ao gerar relatório: {e}")

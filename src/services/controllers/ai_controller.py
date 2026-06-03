@@ -39,11 +39,13 @@ async def generate_financial_report(telegram_id: str, account_id: int, month: in
     2. Identifique onde o usuário mais gastou.
     3. Dê 3 dicas práticas e curtas de como economizar ou investir melhor bases nestes dados.
     
-    Seja amigável e direto. Use Markdown.
+    Seja amigável e direto. Use tags HTML (<b> para negrito, <i> para itálico) em vez de Markdown. Não use códigos ou blocos complexos.
     """
 
     # 4. Generate Response
     response = generate_gpt_response(prompt)
     
-    header = f"🤖 *Relatório de IA — {month_name}*\n\n"
+    header = f"🤖 <b>Relatório de IA — {month_name}</b>\n\n"
+    # Basic cleanup for HTML safety
+    response = response.replace("<br>", "\n").replace("<p>", "").replace("</p>", "\n")
     return header + response
