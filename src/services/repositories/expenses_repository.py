@@ -61,17 +61,22 @@ async def create_expense_repo(
         return expense.to_dict(), None
 
 
-async def list_expenses_repo(telegram_id: str, account_id: int | None = None):
+async def list_expenses_repo(telegram_id: str, account_id: int | None = None, month: int | None = None, year: int | None = None):
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
             return [], "Usuário não encontrado."
 
-        filters = {"user_id": user.user_id}
+        query = select(Expenses).filter(Expenses.user_id == user.user_id)
         if account_id is not None:
-            filters["account_id"] = account_id
+            query = query.filter(Expenses.account_id == account_id)
 
-        expenses = (await session.execute(select(Expenses).filter_by(**filters))).scalars().all()
+        if month is not None and year is not None:
+            from sqlalchemy import extract
+            query = query.filter(extract('month', Expenses.created_at) == month)
+            query = query.filter(extract('year', Expenses.created_at) == year)
+
+        expenses = (await session.execute(query)).scalars().all()
         return [ex.to_dict() for ex in expenses], None
 
 

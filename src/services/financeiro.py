@@ -7,17 +7,24 @@ from database.models.t04_expenses import Expenses
 from database.models.t05_incomes import Incomes
 
 
-async def calculate_balance(account_id: int):
+async def calculate_balance(account_id: int, month: int | None = None, year: int | None = None):
     """Return (total_incomes, total_expenses, balance) for the given account."""
     async with get_session() as session:
-        total_incomes_result = await session.execute(
-            select(func.sum(Incomes.value)).filter_by(account_id=account_id)
-        )
+        from sqlalchemy import extract
+        
+        income_query = select(func.sum(Incomes.value)).filter(Incomes.account_id == account_id)
+        expense_query = select(func.sum(Expenses.value)).filter(Expenses.account_id == account_id)
+
+        if month is not None and year is not None:
+            income_query = income_query.filter(extract('month', Incomes.created_at) == month)
+            income_query = income_query.filter(extract('year', Incomes.created_at) == year)
+            expense_query = expense_query.filter(extract('month', Expenses.created_at) == month)
+            expense_query = expense_query.filter(extract('year', Expenses.created_at) == year)
+
+        total_incomes_result = await session.execute(income_query)
         total_incomes = total_incomes_result.scalar() or 0.0
 
-        total_expenses_result = await session.execute(
-            select(func.sum(Expenses.value)).filter_by(account_id=account_id)
-        )
+        total_expenses_result = await session.execute(expense_query)
         total_expenses = total_expenses_result.scalar() or 0.0
 
         balance = total_incomes - total_expenses

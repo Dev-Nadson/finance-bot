@@ -2,7 +2,7 @@ from services.financeiro import calculate_balance as _calculate_balance
 from services.controllers.login_controller import _ensure_active_account
 
 
-async def calculate_balance(telegram_id: str, context=None):
+async def calculate_balance(telegram_id: str, context=None, month: int | None = None, year: int | None = None):
     """Calculate balance for the active account of the user."""
     account_id = None
     if context is not None:
@@ -11,4 +11,4 @@ async def calculate_balance(telegram_id: str, context=None):
     if account_id is None:
         return 0, 0, 0, "Nenhuma conta ativa encontrada."
 
-    return await _calculate_balance(account_id)
+    return await _calculate_balance(account_id, month=month, year=year)

@@ -213,8 +213,8 @@ async def inc_delete_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE)
     return ConversationHandler.END
 
 
-async def list_incomes(telegram_id: str, account_id: int | None = None):
-    return await list_incomes_repo(telegram_id, account_id)
+async def list_incomes(telegram_id: str, account_id: int | None = None, month: int | None = None, year: int | None = None):
+    return await list_incomes_repo(telegram_id, account_id, month=month, year=year)
 
 
 def get_income_handler():

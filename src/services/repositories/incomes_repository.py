@@ -60,17 +60,22 @@ async def create_income_repo(
         return income.to_dict(), None
 
 
-async def list_incomes_repo(telegram_id: str, account_id: int | None = None):
+async def list_incomes_repo(telegram_id: str, account_id: int | None = None, month: int | None = None, year: int | None = None):
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
             return [], "Usuário não encontrado."
 
-        filters = {"user_id": user.user_id}
+        query = select(Incomes).filter(Incomes.user_id == user.user_id)
         if account_id is not None:
-            filters["account_id"] = account_id
+            query = query.filter(Incomes.account_id == account_id)
+        
+        if month is not None and year is not None:
+            from sqlalchemy import extract
+            query = query.filter(extract('month', Incomes.created_at) == month)
+            query = query.filter(extract('year', Incomes.created_at) == year)
 
-        incomes = (await session.execute(select(Incomes).filter_by(**filters))).scalars().all()
+        incomes = (await session.execute(query)).scalars().all()
         return [inc.to_dict() for inc in incomes], None
 
 
