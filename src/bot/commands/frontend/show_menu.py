@@ -32,6 +32,7 @@ async def _show_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton("📈 Gráficos", callback_data="menu_charts")],
             [InlineKeyboardButton("📅 Escolher Mês", callback_data="menu_months")],
             [InlineKeyboardButton("🤖 Análise IA (Insights)", callback_data="menu_ai_report")],
+            [InlineKeyboardButton("🌐 Dashboard Web", url="http://127.0.0.1:5000/")],
         ]
     )
     text = (
@@ -275,7 +276,13 @@ async def _handle_charts(update, context, data):
                 values=list(category_data.values()),
             )
         )
-        await query.message.reply_photo(chart, caption="🥧 Despesas por categoria")
+        await query.message.reply_photo(
+            chart, 
+            caption="🥧 Despesas por categoria", 
+            read_timeout=60, 
+            write_timeout=60, 
+            connect_timeout=60
+        )
 
         nav_keyboard = InlineKeyboardMarkup([
             [
@@ -300,7 +307,13 @@ async def _handle_charts(update, context, data):
                 ylabel="R$",
             )
         )
-        await query.message.reply_photo(chart, caption="📈 Evolução mensal de despesas")
+        await query.message.reply_photo(
+            chart, 
+            caption="📈 Evolução mensal de despesas", 
+            read_timeout=60, 
+            write_timeout=60, 
+            connect_timeout=60
+        )
 
         nav_keyboard = InlineKeyboardMarkup([
             [
@@ -325,7 +338,13 @@ async def _handle_charts(update, context, data):
                 ylabel="R$",
             )
         )
-        await query.message.reply_photo(chart, caption="📈 Evolução mensal de receitas")
+        await query.message.reply_photo(
+            chart, 
+            caption="📈 Evolução mensal de receitas", 
+            read_timeout=60, 
+            write_timeout=60, 
+            connect_timeout=60
+        )
 
         nav_keyboard = InlineKeyboardMarkup([
             [
