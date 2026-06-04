@@ -1,3 +1,4 @@
+import bcrypt
 from sqlalchemy import select
 
 from database.models.db_config import get_session
@@ -18,7 +19,8 @@ async def create_account_repo_v1(account_name: str, password: str, user_id: int)
             print(f"User already has account: {account_exists.to_dict()}")
             return 409
 
-        account = Account(name=account_name, password=password)
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        account = Account(name=account_name, password=hashed_password)
         session.add(account)
         await session.flush()
 
@@ -41,7 +43,13 @@ async def create_account_repo(name: str, password: str, telegram_id: str):
         if not user:
             return None, "Usuário não encontrado."
 
-        account = Account(name=name, password=password)
+        # Verificar unicidade global do nome (necessário pois o login busca por nome)
+        existing = (await session.execute(select(Account).filter_by(name=name))).scalar_one_or_none()
+        if existing:
+            return None, f"Já existe uma conta com o nome '{name}'. Escolha um nome diferente."
+
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        account = Account(name=name, password=hashed_password)
         session.add(account)
         await session.flush()
 
@@ -97,7 +105,7 @@ async def login_account_repo(account_name: str, password: str, telegram_id: str)
         if not account:
             return None, "Conta não encontrada."
 
-        if account.password != password:
+        if not bcrypt.checkpw(password.encode('utf-8'), account.password.encode('utf-8')):
             return None, "Senha incorreta."
 
         existing_link = (

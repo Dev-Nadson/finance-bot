@@ -16,6 +16,7 @@ class Expenses(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime)
     delete_at = Column(DateTime)
+    competencia = Column(String(7), nullable=True)  # formato: "YYYY-MM"
 
     def to_dict(self):
         return {
@@ -29,6 +30,7 @@ class Expenses(Base):
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "deleted_at": self.delete_at,
+            "competencia": self.competencia,
         }
 
 

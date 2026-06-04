@@ -139,8 +139,11 @@ def pizza():
     acc, _ = get_default_account()
     if not acc: return ""
     
+    month = request.args.get("month", type=int)
+    year = request.args.get("year", type=int)
+    
     async def fetch():
-        return await total_expenses_by_category(acc.account_id)
+        return await total_expenses_by_category(acc.account_id, month=month, year=year)
         
     category_data = asyncio.run(fetch())
     if not category_data:

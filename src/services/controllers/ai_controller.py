@@ -1,4 +1,5 @@
 from datetime import datetime
+import asyncio
 from config.libs.openapi_config import generate_gpt_response
 from services.financeiro import calculate_balance
 from services.repositories.expenses_repository import list_expenses_repo
@@ -43,7 +44,7 @@ async def generate_financial_report(telegram_id: str, account_id: int, month: in
     """
 
     # 4. Generate Response
-    response = generate_gpt_response(prompt)
+    response = await asyncio.to_thread(generate_gpt_response, prompt)
     
     header = f"🤖 <b>Relatório de IA — {month_name}</b>\n\n"
     # Basic cleanup for HTML safety

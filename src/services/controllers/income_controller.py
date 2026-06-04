@@ -83,7 +83,13 @@ async def inc_type_step(update: Update, context: ContextTypes.DEFAULT_TYPE):
     account_id = context.user_data["account_id"]
 
     try:
-        inc, err = await create_income_repo(account_id, value, inc_type, inc_type, name, telegram_id)
+        from datetime import datetime as _dt
+        _now = _dt.now()
+        _month = context.user_data.get("active_month", _now.month)
+        _year = context.user_data.get("active_year", _now.year)
+        competencia = f"{_year:04d}-{_month:02d}"
+
+        inc, err = await create_income_repo(account_id, value, inc_type, inc_type, name, telegram_id, competencia=competencia)
         if err:
             await update.message.reply_text(f"Erro ao registrar receita: {err}")
         else:

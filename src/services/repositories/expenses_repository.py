@@ -31,7 +31,8 @@ async def create_expenses_repository(
 
 
 async def create_expense_repo(
-    account_id: int, value: float, type: str, category: str, description: str, telegram_id: str
+    account_id: int, value: float, type: str, category: str, description: str, telegram_id: str,
+    competencia: str | None = None,
 ):
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
@@ -55,6 +56,7 @@ async def create_expense_repo(
             type=type,
             category=category,
             description=description,
+            competencia=competencia,
         )
         session.add(expense)
         await session.flush()
@@ -72,9 +74,8 @@ async def list_expenses_repo(telegram_id: str, account_id: int | None = None, mo
             query = query.filter(Expenses.account_id == account_id)
 
         if month is not None and year is not None:
-            from sqlalchemy import extract
-            query = query.filter(extract('month', Expenses.created_at) == month)
-            query = query.filter(extract('year', Expenses.created_at) == year)
+            competencia_filter = f"{year:04d}-{month:02d}"
+            query = query.filter(Expenses.competencia == competencia_filter)
 
         expenses = (await session.execute(query)).scalars().all()
         return [ex.to_dict() for ex in expenses], None

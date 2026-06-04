@@ -15,6 +15,7 @@ class Incomes(Base):
     description = Column(VARCHAR)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime)
+    competencia = Column(String(7), nullable=True)  # formato: "YYYY-MM"
     deleted_at = Column(DateTime)
 
     def to_dict(self):
@@ -29,6 +30,7 @@ class Incomes(Base):
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "deleted_at": self.deleted_at,
+            "competencia": self.competencia,
         }
 
 

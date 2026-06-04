@@ -101,7 +101,13 @@ async def exp_category(update: Update, context: ContextTypes.DEFAULT_TYPE):
     account_id = context.user_data["account_id"]
 
     try:
-        exp, err = await create_expense_repo(account_id, value, category, category, name, telegram_id)
+        from datetime import datetime as _dt
+        _now = _dt.now()
+        _month = context.user_data.get("active_month", _now.month)
+        _year = context.user_data.get("active_year", _now.year)
+        competencia = f"{_year:04d}-{_month:02d}"
+
+        exp, err = await create_expense_repo(account_id, value, category, category, name, telegram_id, competencia=competencia)
         if err:
             await query.edit_message_text(f"Erro ao registrar despesa: {err}")
         else:
