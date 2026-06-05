@@ -1,15 +1,17 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from datetime import datetime
+
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
+
 from services.controllers.ai_controller import generate_financial_report
 from services.controllers.login_controller import _ensure_active_account
-from datetime import datetime
 
 
 async def send_ai_analysis(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Command /analise to generate AI financial insights."""
     telegram_id = str(update.effective_user.id)
     account_id = await _ensure_active_account(telegram_id, context)
-    
+
     if not account_id:
         await update.message.reply_text("Selecione uma conta primeiro em /menu → 💳 Contas.")
         return

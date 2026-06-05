@@ -10,7 +10,7 @@ async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
     telegram_id = str(update.effective_user.id)
 
     response_code = await register_user(user_name, telegram_id)
-    
+
     accounts, _ = await list_accounts_repo(str(telegram_id))
 
     if response_code == 409:
@@ -24,9 +24,9 @@ async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Parece que você ainda não tem uma conta cadastrada. "
             "Para começar a organizar suas finanças, primeiro crie uma conta bancária."
         )
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("➕ Criar Minha Primeira Conta", callback_data="acc_add")]
-        ])
+        keyboard = InlineKeyboardMarkup(
+            [[InlineKeyboardButton("➕ Criar Minha Primeira Conta", callback_data="acc_add")]]
+        )
     else:
         active_id = context.user_data.get("active_account_id")
         if not active_id:
@@ -40,8 +40,6 @@ async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"Você está na conta: *{context.user_data['active_account_name']}*.\n"
             "Use o /menu para gerenciar suas receitas e despesas."
         )
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🏠 Abrir Menu Principal", callback_data="menu_main")]
-        ])
+        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🏠 Abrir Menu Principal", callback_data="menu_main")]])
 
     await update.message.reply_text(message, parse_mode="Markdown", reply_markup=keyboard)

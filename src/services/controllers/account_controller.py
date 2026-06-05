@@ -58,14 +58,17 @@ async def account_pass(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"Erro ao criar conta: {err}")
     else:
         from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("💳 Ir para Contas", callback_data="menu_contas"),
-             InlineKeyboardButton("🏠 Menu", callback_data="menu_main")]
-        ])
+
+        keyboard = InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton("💳 Ir para Contas", callback_data="menu_contas"),
+                    InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+                ]
+            ]
+        )
         await update.message.reply_text(
-            f"✅ Conta *{acc['name']}* criada com sucesso!",
-            parse_mode="Markdown",
-            reply_markup=keyboard
+            f"✅ Conta *{acc['name']}* criada com sucesso!", parse_mode="Markdown", reply_markup=keyboard
         )
 
     context.user_data.pop("account_name", None)

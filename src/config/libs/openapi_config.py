@@ -4,6 +4,7 @@ from config.libs.envroinments import env
 
 client = OpenAI(api_key=env.OPENAI_API_KEY)
 
+
 def generate_gpt_response(prompt: str) -> str:
     try:
         completion = client.chat.completions.create(

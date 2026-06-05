@@ -18,5 +18,6 @@ async def create_database():
 
     print("\033[32mSucesso! Tabelas verificadas/criadas.\033[0m")
 
+
 if __name__ == "__main__":
     asyncio.run(create_database())

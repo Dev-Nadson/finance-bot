@@ -16,7 +16,9 @@ from services.repositories.expenses_repository import (
     update_expense_repo,
 )
 
-EXP_NAME, EXP_VALUE, EXP_CATEGORY, EXP_EDIT_ID, EXP_EDIT_FIELD, EXP_EDIT_VALUE, EXP_DELETE_ID, EXP_DELETE_CONFIRM = range(8)  # noqa
+EXP_NAME, EXP_VALUE, EXP_CATEGORY, EXP_EDIT_ID, EXP_EDIT_FIELD, EXP_EDIT_VALUE, EXP_DELETE_ID, EXP_DELETE_CONFIRM = (
+    range(8)
+)  # noqa
 
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -26,7 +28,6 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text(msg)
     return ConversationHandler.END
-
 
 
 async def start_expense(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -73,11 +74,13 @@ async def exp_value(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Valor inválido. Digite um número positivo.")
         return EXP_VALUE
 
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🍔 Alimentação", callback_data="exp_cat_alimentacao")],
-        [InlineKeyboardButton("🎮 Lazer", callback_data="exp_cat_lazer")],
-        [InlineKeyboardButton("🏠 Necessidades Básicas", callback_data="exp_cat_necessidades")],
-    ])
+    keyboard = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("🍔 Alimentação", callback_data="exp_cat_alimentacao")],
+            [InlineKeyboardButton("🎮 Lazer", callback_data="exp_cat_lazer")],
+            [InlineKeyboardButton("🏠 Necessidades Básicas", callback_data="exp_cat_necessidades")],
+        ]
+    )
     await update.message.reply_text("Selecione a categoria da despesa:", reply_markup=keyboard)
     return EXP_CATEGORY
 
@@ -100,24 +103,32 @@ async def exp_category(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
         from datetime import datetime as _dt
+
         _now = _dt.now()
         _month = context.user_data.get("active_month", _now.month)
         _year = context.user_data.get("active_year", _now.year)
         competencia = f"{_year:04d}-{_month:02d}"
 
-        _, err = await create_expense_repo(account_id, value, category, category, name, telegram_id, competencia=competencia)
+        _, err = await create_expense_repo(
+            account_id, value, category, category, name, telegram_id, competencia=competencia
+        )
         if err:
             await query.edit_message_text(f"Erro ao registrar despesa: {err}")
         else:
             from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-            keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("💸 Mais Despesas", callback_data="menu_despesas"),
-                 InlineKeyboardButton("🏠 Menu", callback_data="menu_main")]
-            ])
+
+            keyboard = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton("💸 Mais Despesas", callback_data="menu_despesas"),
+                        InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+                    ]
+                ]
+            )
             await query.edit_message_text(
                 f"✅ Despesa *{name}* de R$ {value:.2f} ({category}) registrada!",
                 parse_mode="Markdown",
-                reply_markup=keyboard
+                reply_markup=keyboard,
             )
     except Exception as e:
         await query.edit_message_text(f"Erro inesperado: {e}")
@@ -125,7 +136,6 @@ async def exp_category(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for key in ("exp_name", "exp_value", "account_id"):
         context.user_data.pop(key, None)
     return ConversationHandler.END
-
 
 
 async def start_edit_expense(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -142,13 +152,15 @@ async def exp_edit_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("ID inválido. Digite apenas o número.")
         return EXP_EDIT_ID
 
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("💰 Valor", callback_data="exp_edit_value")],
-        [InlineKeyboardButton("🍔 Alimentação", callback_data="exp_edit_cat_alimentacao")],
-        [InlineKeyboardButton("🎮 Lazer", callback_data="exp_edit_cat_lazer")],
-        [InlineKeyboardButton("🏠 Necessidades Básicas", callback_data="exp_edit_cat_necessidades")],
-        [InlineKeyboardButton("📝 Descrição", callback_data="exp_edit_description")],
-    ])
+    keyboard = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("💰 Valor", callback_data="exp_edit_value")],
+            [InlineKeyboardButton("🍔 Alimentação", callback_data="exp_edit_cat_alimentacao")],
+            [InlineKeyboardButton("🎮 Lazer", callback_data="exp_edit_cat_lazer")],
+            [InlineKeyboardButton("🏠 Necessidades Básicas", callback_data="exp_edit_cat_necessidades")],
+            [InlineKeyboardButton("📝 Descrição", callback_data="exp_edit_description")],
+        ]
+    )
     await update.message.reply_text("O que deseja editar?", reply_markup=keyboard)
     return EXP_EDIT_FIELD
 
@@ -230,12 +242,14 @@ async def exp_delete_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("ID inválido.")
         return EXP_DELETE_ID
 
-    keyboard = InlineKeyboardMarkup([
+    keyboard = InlineKeyboardMarkup(
         [
-            InlineKeyboardButton("✅ Confirmar exclusão", callback_data="exp_delete_yes"),
-            InlineKeyboardButton("❌ Cancelar", callback_data="exp_delete_no"),
+            [
+                InlineKeyboardButton("✅ Confirmar exclusão", callback_data="exp_delete_yes"),
+                InlineKeyboardButton("❌ Cancelar", callback_data="exp_delete_no"),
+            ]
         ]
-    ])
+    )
     await update.message.reply_text(
         f"⚠️ Tem certeza que deseja excluir a despesa #{context.user_data['delete_expense_id']}?",
         reply_markup=keyboard,

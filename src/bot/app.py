@@ -24,6 +24,7 @@ def register_handlers(app: Application):
     app.add_handler(CommandHandler("chart", back.send_chart))
     app.add_handler(CommandHandler("chart2", back.send_pie_chart))
     app.add_handler(CommandHandler("saldo", back.send_saldo))
-    
+
     from bot.commands.backend.ia_report import send_ai_analysis
+
     app.add_handler(CommandHandler("analise", send_ai_analysis))
