@@ -6,12 +6,12 @@ from .db_config import Base, engine
 class User(Base):
     __tablename__ = "users"
     user_id = Column(Integer, primary_key=True, autoincrement=True)
-    telegram_id = Column(String(255), unique=True, nullable=False)
+    telegram_id = Column(String(50), unique=True, nullable=False)
     name = Column(String(255), nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime)
 
-    def to_dict(self):  # me lembra de explicar isso
+    def to_dict(self):
         return {
             "id": self.user_id,
             "telegram_id": self.telegram_id,

@@ -1,4 +1,4 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
 from services.controllers.user_controller import register_user
@@ -7,7 +7,7 @@ from services.repositories.accounts_repository import list_accounts_repo
 
 async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_name = update.effective_user.first_name
-    telegram_id = update.effective_user.id
+    telegram_id = str(update.effective_user.id)
 
     response_code = await register_user(user_name, telegram_id)
     

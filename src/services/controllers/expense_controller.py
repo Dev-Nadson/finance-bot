@@ -16,8 +16,6 @@ from services.repositories.expenses_repository import (
     update_expense_repo,
 )
 
-EXPENSE_CATEGORIES = ["Alimentação", "Lazer", "Necessidades Básicas"]
-
 EXP_NAME, EXP_VALUE, EXP_CATEGORY, EXP_EDIT_ID, EXP_EDIT_FIELD, EXP_EDIT_VALUE, EXP_DELETE_ID, EXP_DELETE_CONFIRM = range(8)  # noqa
 
 
@@ -107,7 +105,7 @@ async def exp_category(update: Update, context: ContextTypes.DEFAULT_TYPE):
         _year = context.user_data.get("active_year", _now.year)
         competencia = f"{_year:04d}-{_month:02d}"
 
-        exp, err = await create_expense_repo(account_id, value, category, category, name, telegram_id, competencia=competencia)
+        _, err = await create_expense_repo(account_id, value, category, category, name, telegram_id, competencia=competencia)
         if err:
             await query.edit_message_text(f"Erro ao registrar despesa: {err}")
         else:
@@ -171,7 +169,7 @@ async def exp_edit_field(update: Update, context: ContextTypes.DEFAULT_TYPE):
         expense_id = context.user_data.pop("edit_expense_id", None)
         new_category = category_map[data]
         try:
-            result, err = await update_expense_repo(expense_id, telegram_id, category=new_category)
+            _, err = await update_expense_repo(expense_id, telegram_id, category=new_category)
             if err:
                 await query.edit_message_text(f"Erro: {err}")
             else:
@@ -207,7 +205,7 @@ async def exp_edit_value(update: Update, context: ContextTypes.DEFAULT_TYPE):
         kwargs["description"] = raw
 
     try:
-        result, err = await update_expense_repo(expense_id, telegram_id, **kwargs)
+        _, err = await update_expense_repo(expense_id, telegram_id, **kwargs)
         if err:
             await update.message.reply_text(f"Erro: {err}")
         else:
@@ -257,7 +255,7 @@ async def exp_delete_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE)
     expense_id = context.user_data.pop("delete_expense_id", None)
 
     try:
-        ok, err = await delete_expense_repo(expense_id, telegram_id)
+        _, err = await delete_expense_repo(expense_id, telegram_id)
         if err:
             await query.edit_message_text(f"Erro: {err}")
         else:
@@ -268,7 +266,12 @@ async def exp_delete_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE)
     return ConversationHandler.END
 
 
-async def list_expenses(telegram_id: str, account_id: int | None = None, month: int | None = None, year: int | None = None):
+async def list_expenses(
+    telegram_id: int | str,
+    account_id: int | None = None,
+    month: int | None = None,
+    year: int | None = None,
+):
     return await list_expenses_repo(telegram_id, account_id, month=month, year=year)
 
 

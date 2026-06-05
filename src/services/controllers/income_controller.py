@@ -89,7 +89,7 @@ async def inc_type_step(update: Update, context: ContextTypes.DEFAULT_TYPE):
         _year = context.user_data.get("active_year", _now.year)
         competencia = f"{_year:04d}-{_month:02d}"
 
-        inc, err = await create_income_repo(account_id, value, inc_type, inc_type, name, telegram_id, competencia=competencia)
+        _, err = await create_income_repo(account_id, value, inc_type, inc_type, name, telegram_id, competencia=competencia)
         if err:
             await update.message.reply_text(f"Erro ao registrar receita: {err}")
         else:
@@ -160,7 +160,7 @@ async def inc_edit_value(update: Update, context: ContextTypes.DEFAULT_TYPE):
         kwargs["description"] = raw
 
     try:
-        result, err = await update_income_repo(income_id, telegram_id, **kwargs)
+        _, err = await update_income_repo(income_id, telegram_id, **kwargs)
         if err:
             await update.message.reply_text(f"Erro: {err}")
         else:
@@ -209,7 +209,7 @@ async def inc_delete_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE)
     income_id = context.user_data.pop("delete_income_id", None)
 
     try:
-        ok, err = await delete_income_repo(income_id, telegram_id)
+        _, err = await delete_income_repo(income_id, telegram_id)
         if err:
             await query.edit_message_text(f"Erro: {err}")
         else:
@@ -219,7 +219,12 @@ async def inc_delete_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE)
     return ConversationHandler.END
 
 
-async def list_incomes(telegram_id: str, account_id: int | None = None, month: int | None = None, year: int | None = None):
+async def list_incomes(
+    telegram_id: int | str,
+    account_id: int | None = None,
+    month: int | None = None,
+    year: int | None = None,
+):
     return await list_incomes_repo(telegram_id, account_id, month=month, year=year)
 
 

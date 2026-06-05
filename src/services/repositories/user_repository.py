@@ -4,7 +4,8 @@ from database.models.db_config import get_session
 from database.models.t01_users import User
 
 
-async def create_user_repository(user_name: str, telegram_id: str):
+async def create_user_repository(user_name: str, telegram_id: int | str):
+    telegram_id = str(telegram_id)
     async with get_session() as session:
         user_exists = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
 

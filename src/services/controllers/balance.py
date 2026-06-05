@@ -1,8 +1,8 @@
-from services.financeiro import calculate_balance as _calculate_balance
 from services.controllers.login_controller import _ensure_active_account
+from services.financeiro import calculate_balance as _calculate_balance
 
 
-async def calculate_balance(telegram_id: str, context=None, month: int | None = None, year: int | None = None):
+async def calculate_balance(telegram_id: int | str, context=None, month: int | None = None, year: int | None = None):
     """Calculate balance for the active account of the user."""
     account_id = None
     if context is not None:

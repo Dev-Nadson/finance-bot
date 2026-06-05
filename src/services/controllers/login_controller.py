@@ -8,7 +8,7 @@ from telegram.ext import (
     filters,
 )
 
-from services.repositories.accounts_repository import login_account_repo, list_accounts_repo
+from services.repositories.accounts_repository import list_accounts_repo, login_account_repo
 
 LOGIN_NAME, LOGIN_PASS = range(2)
 
@@ -61,7 +61,7 @@ async def login_pass(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-async def _ensure_active_account(telegram_id: str, context: ContextTypes.DEFAULT_TYPE) -> int | None:
+async def _ensure_active_account(telegram_id: int | str, context: ContextTypes.DEFAULT_TYPE) -> int | None:
     active_id = context.user_data.get("active_account_id")
     if active_id:
         return active_id

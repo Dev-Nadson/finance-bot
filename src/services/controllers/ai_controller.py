@@ -1,11 +1,12 @@
-from datetime import datetime
 import asyncio
+from datetime import datetime
+
 from config.libs.openapi_config import generate_gpt_response
 from services.financeiro import calculate_balance
 from services.repositories.expenses_repository import list_expenses_repo
 
 
-async def generate_financial_report(telegram_id: str, account_id: int, month: int, year: int) -> str:
+async def generate_financial_report(telegram_id: int | str, account_id: int, month: int, year: int) -> str:
     """Generate a financial report using AI based on the user's monthly data."""
     
     # 1. Fetch balance data

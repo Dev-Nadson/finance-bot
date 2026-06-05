@@ -1,4 +1,3 @@
-from services.repositories.accounts_repository import create_account_repo, list_accounts_repo
 from telegram import Update
 from telegram.ext import (
     CallbackQueryHandler,
@@ -8,6 +7,8 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
+
+from services.repositories.accounts_repository import create_account_repo, list_accounts_repo
 
 ACCOUNT_NAME, ACCOUNT_PASS = range(2)
 
@@ -85,5 +86,5 @@ def get_account_handler():
     )
 
 
-async def list_accounts(telegram_id: str):
+async def list_accounts(telegram_id: int | str):
     return await list_accounts_repo(telegram_id)

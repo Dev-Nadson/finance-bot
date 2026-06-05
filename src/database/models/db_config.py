@@ -5,9 +5,12 @@ from sqlalchemy.orm import declarative_base
 
 from config.libs.envroinments import env
 
+from sqlalchemy.pool import NullPool
+
 engine = create_async_engine(
     env.SQL_ALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False},  # necessário para SQLite em contexto async
+    echo=False,
+    poolclass=NullPool,
 )
 
 _SessionLocal = async_sessionmaker(

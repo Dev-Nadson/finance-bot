@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    container_name: finance-bot-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRESQL_USERNAME=finance_user
+      - POSTGRESQL_PASSWORD=finance_pass
+      - POSTGRESQL_DATABASE=finance_db
+    volumes:
+      - pgdata:/bitnami/postgresql
+
+volumes:
+  pgdata:
+    driver: local

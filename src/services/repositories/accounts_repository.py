@@ -7,37 +7,8 @@ from database.models.t02_accounts import Account
 from database.models.t03_users_accounts import UserAccounts
 
 
-async def create_account_repo_v1(account_name: str, password: str, user_id: int):
-    async with get_session() as session:
-        user_exists = (await session.execute(select(User).filter_by(user_id=user_id))).scalar_one_or_none()
-        if user_exists is None:
-            print(f"User with ID {user_id} does not exist.")
-            return 404
-
-        account_exists = (await session.execute(select(UserAccounts).filter_by(user_id=user_id))).scalar_one_or_none()
-        if account_exists is not None:
-            print(f"User already has account: {account_exists.to_dict()}")
-            return 409
-
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        account = Account(name=account_name, password=hashed_password)
-        session.add(account)
-        await session.flush()
-
-        user_account = UserAccounts(user_id=user_id, account_id=account.account_id)
-        session.add(user_account)
-        await session.flush()
-
-        user_account_exists = (
-            await session.execute(select(UserAccounts).filter_by(user_id=user_id, account_id=account.account_id))
-        ).scalar_one_or_none()
-        if user_account_exists is None:
-            return 500
-
-        return 201
-
-
-async def create_account_repo(name: str, password: str, telegram_id: str):
+async def create_account_repo(name: str, password: str, telegram_id: int | str):
+    telegram_id = str(telegram_id)
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
@@ -58,7 +29,8 @@ async def create_account_repo(name: str, password: str, telegram_id: str):
         return account.to_dict(), None
 
 
-async def list_accounts_repo(telegram_id: str):
+async def list_accounts_repo(telegram_id: int | str):
+    telegram_id = str(telegram_id)
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
@@ -74,28 +46,9 @@ async def list_accounts_repo(telegram_id: str):
         return [acc.to_dict() for acc in accounts], None
 
 
-async def delete_account_repo(account_id: int, telegram_id: str):
-    async with get_session() as session:
-        user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
-        if not user:
-            return False, "Usuário não encontrado."
-
-        user_account = (
-            await session.execute(select(UserAccounts).filter_by(user_id=user.user_id, account_id=account_id))
-        ).scalar_one_or_none()
-        if not user_account:
-            return False, "Conta não pertence a este usuário ou já foi excluída."
-
-        await session.delete(user_account)
-        account = (await session.execute(select(Account).filter_by(account_id=account_id))).scalar_one_or_none()
-        if account:
-            await session.delete(account)
-
-        return True, None
-
-
-async def login_account_repo(account_name: str, password: str, telegram_id: str):
+async def login_account_repo(account_name: str, password: str, telegram_id: int | str):
     """Verify account credentials and link the user to the account if not already linked."""
+    telegram_id = str(telegram_id)
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
