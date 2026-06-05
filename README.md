@@ -43,17 +43,7 @@ docker compose up -d
 
 ### 4. Inicializar as tabelas
 ```bash
-uv run python -c "
-import asyncio
-from src.database.models.db_config import engine, Base
-import src.database.models.t01_users
-import src.database.models.t02_accounts
-import src.database.models.t03_users_accounts
-import src.database.models.t04_expenses
-import src.database.models.t05_incomes
-asyncio.run(engine.run_sync(Base.metadata.create_all))
-print('Tabelas criadas com sucesso!')
-"
+uv run src/setup_db.py
 ```
 
 ### 5. Executar o bot

@@ -2,27 +2,27 @@ import asyncio
 import io
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
+# Add src to path
 ROOT_DIR = Path(__file__).resolve().parents[1]
 sys.path.append(str(ROOT_DIR))
 
-from datetime import datetime
+from flask import Flask, jsonify, render_template, request, send_file  # noqa: E402
+from sqlalchemy import select  # noqa: E402
 
-from flask import Flask, jsonify, render_template, request, send_file
-from sqlalchemy import select
-
-from config.schemas.classes import ChartLinesData, ChartPieData
-from database.models.db_config import get_session
-from database.models.t01_users import User
-from database.models.t02_accounts import Account
-from services.financeiro import (
+from config.schemas.classes import ChartLinesData, ChartPieData  # noqa: E402
+from database.models.db_config import get_session  # noqa: E402
+from database.models.t01_users import User  # noqa: E402
+from database.models.t02_accounts import Account  # noqa: E402
+from services.financeiro import (  # noqa: E402
     calculate_balance,
     monthly_expenses_evolution,
     monthly_incomes_evolution,
     total_expenses_by_category,
 )
-from services.reports.charts import generate_lines_chart, generate_pie_chart
+from services.reports.charts import generate_lines_chart, generate_pie_chart  # noqa: E402
 
 app = Flask(__name__)
 

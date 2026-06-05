@@ -23,8 +23,8 @@ async def send_chart(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Nenhum dado disponível para gerar o gráfico.")
         return
 
-    exp_by_label = dict(zip(exp_labels, exp_totals))
-    inc_by_label = dict(zip(inc_labels, inc_totals))
+    exp_by_label = dict(zip(exp_labels, exp_totals, strict=False))
+    inc_by_label = dict(zip(inc_labels, inc_totals, strict=False))
 
     y_expenses = [exp_by_label.get(lbl, 0.0) for lbl in all_labels]
     y_incomes = [inc_by_label.get(lbl, 0.0) for lbl in all_labels]

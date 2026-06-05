@@ -1,7 +1,7 @@
 import asyncio
 from datetime import datetime
 
-from config.libs.openapi_config import generate_gpt_response
+from config.libs.openai_config import generate_gpt_response
 from services.financeiro import calculate_balance
 from services.repositories.expenses_repository import list_expenses_repo
 
@@ -41,7 +41,8 @@ async def generate_financial_report(telegram_id: int | str, account_id: int, mon
     2. Identifique onde o usuário mais gastou.
     3. Dê 3 dicas práticas e curtas de como economizar ou investir melhor bases nestes dados.
     
-    Seja amigável e direto. Use tags HTML (<b> para negrito, <i> para itálico) em vez de Markdown. Não use códigos ou blocos complexos.
+    Seja amigável e direto. Use tags HTML (<b> para negrito, <i> para itálico)
+    em vez de Markdown. Não use códigos ou blocos complexos.
     """
 
     # 4. Generate Response

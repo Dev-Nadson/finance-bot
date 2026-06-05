@@ -35,7 +35,7 @@ finance-bot/
 │   │       └── frontend/           # Comandos de UI (menu, help)
 │   ├── config/
 │   │   ├── libs/
-│   │   │   ├── openapi_config.py   # Cliente OpenAI (ativo)
+│   │   │   ├── openai_config.py   # Cliente OpenAI (ativo)
 │   │   │   ├── groq_config.py      # Cliente Groq (reservado para uso futuro)
 │   │   │   └── envroinments.py     # Carregamento e validação do .env
 │   │   └── schemas/                # Schemas Pydantic para gráficos
