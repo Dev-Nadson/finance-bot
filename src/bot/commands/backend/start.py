@@ -30,7 +30,6 @@ async def send_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         active_id = context.user_data.get("active_account_id")
         if not active_id:
-            # Set first account as default if none active
             context.user_data["active_account_id"] = accounts[0]["id"]
             context.user_data["active_account_name"] = accounts[0]["name"]
             active_id = accounts[0]["id"]

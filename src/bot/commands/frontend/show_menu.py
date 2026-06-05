@@ -124,7 +124,6 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif data.startswith("chart_"):
         await _handle_charts(update, context, data)
     else:
-        # Silently ignore unknown callbacks or those handled by ConversationHandlers
         pass
 
 
@@ -350,7 +349,6 @@ async def _months_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     now = datetime.now()
 
-    # Options: Current month, Last month, 2 months ago
     m1 = now
     m2 = now.replace(day=1) - timedelta(days=1)
     m3 = m2.replace(day=1) - timedelta(days=1)

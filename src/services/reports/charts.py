@@ -97,7 +97,7 @@ def generate_lines_chart(data: ChartLinesData) -> bytes:
         )
         line_objects.append(line)
 
-        for xi, yi in zip(data.x_values, y_vals):  # noqa B905
+        for xi, yi in zip(data.x_values, y_vals):  
             ax.annotate(
                 f"{yi:g}",
                 xy=(xi, yi),
@@ -140,7 +140,6 @@ def generate_lines_chart(data: ChartLinesData) -> bytes:
         path_effects=[pe.withStroke(linewidth=4, foreground=BG)],
     )
 
-    # Legenda lateral - só quando há múltiplas séries
     if has_legend:
         legend_ax = fig.add_axes([0.73, 0.25, 0.25, 0.50], zorder=3)
         legend_ax.set_facecolor("none")
@@ -214,40 +213,6 @@ def generate_lines_chart(data: ChartLinesData) -> bytes:
     fig.savefig(buf, format="png", bbox_inches="tight", dpi=130, facecolor=BG, edgecolor="none")
     buf.seek(0)
     return buf.getvalue()
-
-
-# if __name__ == '__main__':
-#     # Série única
-#     sample_single = ChartLinesData(
-#         title='Receita Mensal 2024',
-#         x_values=['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
-#                   'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-#         y_values=[42, 58, 51, 67, 74, 88, 95, 82, 99, 110, 104, 130],
-#         xlabel='Mês',
-#         ylabel='Receita (k R$)',
-#     )
-
-#     with open('lines_single.png', 'wb') as f:
-#         f.write(generate_lines_chart(sample_single))
-#     print('✅ lines_single.png')
-
-#     # Múltiplas séries
-#     sample_multi = ChartLinesData(
-#         title='Vendas por Canal — 2024',
-#         x_values=['Q1', 'Q2', 'Q3', 'Q4'],
-#         y_values=[
-#             [120, 145, 162, 190],
-#             [80,  95, 110, 140],
-#             [55,  70,  88, 105],
-#         ],
-#         xlabel='Trimestre',
-#         ylabel='Unidades',
-#         series_labels=['Online', 'Loja Física', 'Parceiros'],
-#     )
-
-#     with open('lines_multi.png', 'wb') as f:
-#         f.write(generate_lines_chart(sample_multi))
-#     print('✅ lines_multi.png')
 
 
 def generate_pie_chart(data: ChartPieData) -> bytes:

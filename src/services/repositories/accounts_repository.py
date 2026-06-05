@@ -13,8 +13,7 @@ async def create_account_repo(name: str, password: str, telegram_id: int | str):
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
             return None, "Usuário não encontrado."
-
-        # Verificar unicidade global do nome (necessário pois o login busca por nome)
+        
         existing = (await session.execute(select(Account).filter_by(name=name))).scalar_one_or_none()
         if existing:
             return None, f"Já existe uma conta com o nome '{name}'. Escolha um nome diferente."
