@@ -10,14 +10,13 @@ from database.models.t05_incomes import Incomes as Incomes
 
 async def create_database():
     async with engine.begin() as conn:
-        print("Limpando dados antigos...")
-        await conn.run_sync(Base.metadata.drop_all)
+        # print("Limpando dados antigos...")
+        # await conn.run_sync(Base.metadata.drop_all)
 
-        print("Criando Tabelas...")
+        print("Criando tabelas (caso não existam)...")
         await conn.run_sync(Base.metadata.create_all)
 
-    print("\033[32mSucesso! Tabelas criadas.\033[0m")
-
+    print("\033[32mSucesso! Tabelas verificadas/criadas.\033[0m")
 
 if __name__ == "__main__":
     asyncio.run(create_database())
