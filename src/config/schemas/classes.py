@@ -1,5 +1,3 @@
-
-
 from pydantic import BaseModel
 
 
@@ -18,7 +16,7 @@ class ChartBaseData(BaseModel):
 
 class ChartLinesData(ChartBaseData):
     x_values: list
-    y_values: list  # lista simples OU lista de listas múltiplas séries
+    y_values: list  
     series_labels: list[str] = []
 
 

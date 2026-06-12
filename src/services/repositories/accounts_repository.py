@@ -19,7 +19,7 @@ async def create_account_repo(name: str, password: str, telegram_id: int | str):
         if existing:
             return None, f"Já existe uma conta com o nome '{name}'. Escolha um nome diferente."
 
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
         account = Account(name=name, password=hashed_password)
         session.add(account)
         await session.flush()
@@ -58,13 +58,11 @@ async def login_account_repo(account_name: str, password: str, telegram_id: int 
         if not account:
             return None, "Conta não encontrada."
 
-        if not bcrypt.checkpw(password.encode('utf-8'), account.password.encode('utf-8')):
+        if not bcrypt.checkpw(password.encode("utf-8"), account.password.encode("utf-8")):
             return None, "Senha incorreta."
 
         existing_link = (
-            await session.execute(
-                select(UserAccounts).filter_by(user_id=user.user_id, account_id=account.account_id)
-            )
+            await session.execute(select(UserAccounts).filter_by(user_id=user.user_id, account_id=account.account_id))
         ).scalar_one_or_none()
 
         if not existing_link:

@@ -2,10 +2,9 @@ from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.pool import NullPool
 
 from config.libs.envroinments import env
-
-from sqlalchemy.pool import NullPool
 
 engine = create_async_engine(
     env.SQL_ALCHEMY_DATABASE_URL,

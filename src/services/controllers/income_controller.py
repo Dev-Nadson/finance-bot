@@ -84,24 +84,30 @@ async def inc_type_step(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
         from datetime import datetime as _dt
+
         _now = _dt.now()
         _month = context.user_data.get("active_month", _now.month)
         _year = context.user_data.get("active_year", _now.year)
         competencia = f"{_year:04d}-{_month:02d}"
 
-        _, err = await create_income_repo(account_id, value, inc_type, inc_type, name, telegram_id, competencia=competencia)
+        _, err = await create_income_repo(
+            account_id, value, inc_type, inc_type, name, telegram_id, competencia=competencia
+        )
         if err:
             await update.message.reply_text(f"Erro ao registrar receita: {err}")
         else:
             from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-            keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton("💰 Mais Receitas", callback_data="menu_receitas"),
-                 InlineKeyboardButton("🏠 Menu", callback_data="menu_main")]
-            ])
+
+            keyboard = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton("💰 Mais Receitas", callback_data="menu_receitas"),
+                        InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+                    ]
+                ]
+            )
             await update.message.reply_text(
-                f"✅ Receita *{name}* de R$ {value:.2f} registrada!",
-                parse_mode="Markdown",
-                reply_markup=keyboard
+                f"✅ Receita *{name}* de R$ {value:.2f} registrada!", parse_mode="Markdown", reply_markup=keyboard
             )
     except Exception as e:
         await update.message.reply_text(f"Erro inesperado: {e}")
@@ -125,10 +131,12 @@ async def inc_edit_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("ID inválido.")
         return INC_EDIT_ID
 
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("💰 Valor", callback_data="inc_edit_value")],
-        [InlineKeyboardButton("📝 Descrição", callback_data="inc_edit_description")],
-    ])
+    keyboard = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("💰 Valor", callback_data="inc_edit_value")],
+            [InlineKeyboardButton("📝 Descrição", callback_data="inc_edit_description")],
+        ]
+    )
     await update.message.reply_text("O que deseja editar?", reply_markup=keyboard)
     return INC_EDIT_FIELD
 
@@ -184,12 +192,14 @@ async def inc_delete_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("ID inválido.")
         return INC_DELETE_ID
 
-    keyboard = InlineKeyboardMarkup([
+    keyboard = InlineKeyboardMarkup(
         [
-            InlineKeyboardButton("✅ Confirmar", callback_data="inc_delete_yes"),
-            InlineKeyboardButton("❌ Cancelar", callback_data="inc_delete_no"),
+            [
+                InlineKeyboardButton("✅ Confirmar", callback_data="inc_delete_yes"),
+                InlineKeyboardButton("❌ Cancelar", callback_data="inc_delete_no"),
+            ]
         ]
-    ])
+    )
     await update.message.reply_text(
         f"⚠️ Tem certeza que deseja excluir a receita #{context.user_data['delete_income_id']}?",
         reply_markup=keyboard,

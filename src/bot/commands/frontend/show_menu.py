@@ -15,8 +15,9 @@ async def show_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def _show_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     from datetime import datetime
+
     active_name = context.user_data.get("active_account_name", "Nenhuma")
-    
+
     # Month handling
     now = datetime.now()
     active_month = context.user_data.get("active_month", now.month)
@@ -35,12 +36,7 @@ async def _show_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton("🌐 Dashboard Web", url="http://127.0.0.1:5000/")],
         ]
     )
-    text = (
-        f"🏠 *Menu Principal*\n\n"
-        f"🔵 Conta ativa: *{active_name}*\n"
-        f"📅 Mês ativo: *{month_name}*\n\n"
-        f"Escolha uma opção:"
-    )
+    text = f"🏠 *Menu Principal*\n\n🔵 Conta ativa: *{active_name}*\n📅 Mês ativo: *{month_name}*\n\nEscolha uma opção:"
 
     try:
         if update.callback_query:
@@ -94,15 +90,16 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await _charts_menu(update, context)
     elif data == "show_balance":
         from datetime import datetime
+
         telegram_id = str(update.effective_user.id)
         now = datetime.now()
         month = context.user_data.get("active_month", now.month)
         year = context.user_data.get("active_year", now.year)
-        
+
         incomes, expenses, balance, err = await calculate_balance(telegram_id, context, month=month, year=year)
         active_name = context.user_data.get("active_account_name", "Ativa")
         month_name = datetime(year, month, 1).strftime("%B/%Y")
-        
+
         if err:
             text = f"Erro ao calcular saldo:\n{err}"
         else:
@@ -127,7 +124,6 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif data.startswith("chart_"):
         await _handle_charts(update, context, data)
     else:
-        # Silently ignore unknown callbacks or those handled by ConversationHandlers
         pass
 
 
@@ -158,10 +154,7 @@ async def _handle_accounts(update, context, data):
         if err or not accs:
             await query.edit_message_text("Nenhuma conta disponível.", reply_markup=keyboard)
         else:
-            buttons = [
-                [InlineKeyboardButton(f"• {a['name']}", callback_data=f"acc_select_{a['id']}")]
-                for a in accs
-            ]
+            buttons = [[InlineKeyboardButton(f"• {a['name']}", callback_data=f"acc_select_{a['id']}")] for a in accs]
             buttons.append([InlineKeyboardButton("🔙 Voltar", callback_data="menu_contas")])
             await query.edit_message_text(
                 "Selecione a conta que deseja ativar:",
@@ -196,10 +189,11 @@ async def _handle_incomes(update, context, data):
 
     if data == "inc_list":
         from datetime import datetime
+
         now = datetime.now()
         month = context.user_data.get("active_month", now.month)
         year = context.user_data.get("active_year", now.year)
-        
+
         incs, err = await list_incomes(user_id, account_id, month=month, year=year)
         if err:
             await query.edit_message_text(f"Erro: {err}", reply_markup=keyboard)
@@ -226,6 +220,7 @@ async def _handle_expenses(update, context, data):
 
     if data == "exp_list":
         from datetime import datetime
+
         now = datetime.now()
         month = context.user_data.get("active_month", now.month)
         year = context.user_data.get("active_year", now.year)
@@ -238,22 +233,22 @@ async def _handle_expenses(update, context, data):
         else:
             text = "💸 *Suas Despesas:*\n\n"
             for e in exps:
-                exp_id = e.get('expenses_id')
-                val = e.get('value', 0)
-                desc = e.get('description')
-                cat = e.get('category')
+                exp_id = e.get("expenses_id")
+                val = e.get("value", 0)
+                desc = e.get("description")
+                cat = e.get("category")
                 text += f"• #{exp_id} R$ {val:.2f} — {desc} [{cat}]\n"
             await query.edit_message_text(text, reply_markup=keyboard, parse_mode="Markdown")
 
 
 async def _handle_charts(update, context, data):
+    from config.schemas.classes import ChartLinesData, ChartPieData
     from services.financeiro import (
-        total_expenses_by_category,
         monthly_expenses_evolution,
         monthly_incomes_evolution,
+        total_expenses_by_category,
     )
-    from services.reports.charts import generate_pie_chart, generate_lines_chart
-    from config.schemas.classes import ChartPieData, ChartLinesData
+    from services.reports.charts import generate_lines_chart, generate_pie_chart
 
     query = update.callback_query
     user_id = str(update.effective_user.id)
@@ -277,19 +272,17 @@ async def _handle_charts(update, context, data):
             )
         )
         await query.message.reply_photo(
-            chart, 
-            caption="🥧 Despesas por categoria", 
-            read_timeout=60, 
-            write_timeout=60, 
-            connect_timeout=60
+            chart, caption="🥧 Despesas por categoria", read_timeout=60, write_timeout=60, connect_timeout=60
         )
 
-        nav_keyboard = InlineKeyboardMarkup([
+        nav_keyboard = InlineKeyboardMarkup(
             [
-                InlineKeyboardButton("📊 Mais Gráficos", callback_data="menu_charts"),
-                InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+                [
+                    InlineKeyboardButton("📊 Mais Gráficos", callback_data="menu_charts"),
+                    InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+                ]
             ]
-        ])
+        )
         await query.message.reply_text("Escolha outra opção:", reply_markup=nav_keyboard)
 
     elif data == "chart_line_expenses":
@@ -308,19 +301,17 @@ async def _handle_charts(update, context, data):
             )
         )
         await query.message.reply_photo(
-            chart, 
-            caption="📈 Evolução mensal de despesas", 
-            read_timeout=60, 
-            write_timeout=60, 
-            connect_timeout=60
+            chart, caption="📈 Evolução mensal de despesas", read_timeout=60, write_timeout=60, connect_timeout=60
         )
 
-        nav_keyboard = InlineKeyboardMarkup([
+        nav_keyboard = InlineKeyboardMarkup(
             [
-                InlineKeyboardButton("📊 Mais Gráficos", callback_data="menu_charts"),
-                InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+                [
+                    InlineKeyboardButton("📊 Mais Gráficos", callback_data="menu_charts"),
+                    InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+                ]
             ]
-        ])
+        )
         await query.message.reply_text("Escolha outra opção:", reply_markup=nav_keyboard)
 
     elif data == "chart_line_incomes":
@@ -339,55 +330,56 @@ async def _handle_charts(update, context, data):
             )
         )
         await query.message.reply_photo(
-            chart, 
-            caption="📈 Evolução mensal de receitas", 
-            read_timeout=60, 
-            write_timeout=60, 
-            connect_timeout=60
+            chart, caption="📈 Evolução mensal de receitas", read_timeout=60, write_timeout=60, connect_timeout=60
         )
 
-        nav_keyboard = InlineKeyboardMarkup([
+        nav_keyboard = InlineKeyboardMarkup(
             [
-                InlineKeyboardButton("📊 Mais Gráficos", callback_data="menu_charts"),
-                InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+                [
+                    InlineKeyboardButton("📊 Mais Gráficos", callback_data="menu_charts"),
+                    InlineKeyboardButton("🏠 Menu", callback_data="menu_main"),
+                ]
             ]
-        ])
+        )
         await query.message.reply_text("Escolha outra opção:", reply_markup=nav_keyboard)
 
 
 async def _months_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     from datetime import datetime, timedelta
+
     now = datetime.now()
-    
-    # Options: Current month, Last month, 2 months ago
+
     m1 = now
-    m2 = (now.replace(day=1) - timedelta(days=1))
-    m3 = (m2.replace(day=1) - timedelta(days=1))
-    
+    m2 = now.replace(day=1) - timedelta(days=1)
+    m3 = m2.replace(day=1) - timedelta(days=1)
+
     options = [m1, m2, m3]
     buttons = []
     for m in options:
         label = m.strftime("%B/%Y")
         callback = f"month_select_{m.month}_{m.year}"
         buttons.append([InlineKeyboardButton(label, callback_data=callback)])
-    
+
     buttons.append([InlineKeyboardButton("🔙 Voltar", callback_data="menu_main")])
-    
+
     text = "📅 *Escolher Período*\n\nSelecione o mês para visualização:"
-    await update.callback_query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(buttons), parse_mode="Markdown")
+    await update.callback_query.edit_message_text(
+        text, reply_markup=InlineKeyboardMarkup(buttons), parse_mode="Markdown"
+    )
 
 
 async def _handle_month_select(update, context, data):
     parts = data.split("_")
     month = int(parts[2])
     year = int(parts[3])
-    
+
     context.user_data["active_month"] = month
     context.user_data["active_year"] = year
-    
+
     from datetime import datetime
+
     month_name = datetime(year, month, 1).strftime("%B/%Y")
-    
+
     await update.callback_query.answer(f"Período alterado para {month_name}")
     await _show_main_menu(update, context)
 
@@ -395,23 +387,25 @@ async def _handle_month_select(update, context, data):
 async def _handle_ai_report(update, context):
     try:
         from services.controllers.ai_controller import generate_financial_report
+
         query = update.callback_query
         await query.answer("Gerando relatório com IA... 🤖", show_alert=False)
-        
+
         telegram_id = str(update.effective_user.id)
         account_id = context.user_data.get("active_account_id")
-        
+
         if not account_id:
             await query.message.reply_text("Selecione uma conta primeiro.")
             return
 
         from datetime import datetime
+
         now = datetime.now()
         month = context.user_data.get("active_month", now.month)
         year = context.user_data.get("active_year", now.year)
-        
+
         text = await generate_financial_report(telegram_id, account_id, month, year)
-        
+
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Voltar", callback_data="menu_main")]])
         await query.message.reply_text(text, reply_markup=keyboard, parse_mode="HTML")
     except Exception as e:

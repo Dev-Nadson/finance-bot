@@ -27,17 +27,20 @@ async def calculate_balance(account_id: int, month: int | None = None, year: int
         balance = total_incomes - total_expenses
         return total_incomes, total_expenses, balance, None
 
-async def total_expenses_by_category(account_id: int, month: int | None = None, year: int | None = None) -> dict[str, float]:
+
+async def total_expenses_by_category(
+    account_id: int, month: int | None = None, year: int | None = None
+) -> dict[str, float]:
     """Return a dict {category: total_value} for all expense categories of the account."""
     async with get_session() as session:
         query = select(Expenses.category, func.sum(Expenses.value)).filter_by(account_id=account_id)
-        
+
         if month is not None and year is not None:
             competencia_filter = f"{year:04d}-{month:02d}"
             query = query.filter(Expenses.competencia == competencia_filter)
-            
+
         query = query.group_by(Expenses.category)
-        
+
         rows = (await session.execute(query)).all()
 
         return {row[0]: row[1] for row in rows if row[0]}

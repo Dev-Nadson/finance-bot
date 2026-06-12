@@ -8,7 +8,12 @@ from database.models.t05_incomes import Incomes
 
 
 async def create_income_repo(
-    account_id: int, value: float, type: str, category: str, description: str, telegram_id: int | str,
+    account_id: int,
+    value: float,
+    type: str,
+    category: str,
+    description: str,
+    telegram_id: int | str,
     competencia: str | None = None,
 ):
     telegram_id = str(telegram_id)
@@ -56,7 +61,7 @@ async def list_incomes_repo(
         query = select(Incomes).filter(Incomes.user_id == user.user_id)
         if account_id is not None:
             query = query.filter(Incomes.account_id == account_id)
-        
+
         if month is not None and year is not None:
             competencia_filter = f"{year:04d}-{month:02d}"
             query = query.filter(Incomes.competencia == competencia_filter)

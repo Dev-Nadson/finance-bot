@@ -8,7 +8,12 @@ from database.models.t04_expenses import Expenses
 
 
 async def create_expense_repo(
-    account_id: int, value: float, type: str, category: str, description: str, telegram_id: int | str,
+    account_id: int,
+    value: float,
+    type: str,
+    category: str,
+    description: str,
+    telegram_id: int | str,
     competencia: str | None = None,
 ):
     telegram_id = str(telegram_id)

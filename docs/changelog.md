@@ -4,6 +4,17 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
 ---
 
+## 1.0.1 — 05/06/2026
+
+### Refatoração e Linting
+- **Correção de Linting (Ruff)**: Resolvidos avisos E501 (linhas longas) em `ai_controller.py` e E402 (ordem de imports) em `app.py`.
+- **Conformidade de Código**: O projeto agora passa em todas as verificações do `ruff check .`.
+
+### Documentação e Setup
+- **Simplificação do Setup de Banco**: O `README.md` foi atualizado para utilizar o script `src/setup_db.py`, substituindo comandos inline complexos para inicialização de tabelas.
+
+---
+
 ## 1.0.0 — 04/06/2026
 
 ### Segurança
