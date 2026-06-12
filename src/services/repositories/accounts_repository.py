@@ -12,7 +12,7 @@ async def create_account_repo(name: str, password: str, telegram_id: int | str):
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
-            return None, "Usuário não encontrado."
+            return None, "Conta não encontrado."
 
         # Verificar unicidade global do nome (necessário pois o login busca por nome)
         existing = (await session.execute(select(Account).filter_by(name=name))).scalar_one_or_none()
@@ -34,7 +34,7 @@ async def list_accounts_repo(telegram_id: int | str):
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
-            return [], "Usuário não encontrado."
+            return [], "Conta não encontrada."
 
         user_accounts = (await session.execute(select(UserAccounts).filter_by(user_id=user.user_id))).scalars().all()
         account_ids = [ua.account_id for ua in user_accounts]
@@ -52,7 +52,7 @@ async def login_account_repo(account_name: str, password: str, telegram_id: int 
     async with get_session() as session:
         user = (await session.execute(select(User).filter_by(telegram_id=telegram_id))).scalar_one_or_none()
         if not user:
-            return None, "Usuário não encontrado."
+            return None, "Conta não encontrada."
 
         account = (await session.execute(select(Account).filter_by(name=account_name))).scalar_one_or_none()
         if not account:
